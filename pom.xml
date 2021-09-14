@@ -4,17 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId> ru.ssau.tk.dmitriy.Laboratory-Work</groupId>
-    <artifactId>Laboratory-Work</artifactId>
+    <groupId>ru.ssau.tk.dmitriy.laboratorywork</groupId>
+    <artifactId>dmitriy-laboratorywork</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-<properties>
-<maven.compiler.target>1.11</maven.compiler.target>
-<maven.compiler.source>1.11</maven.compiler.source>
-</properties>
-<dependencies>
-</dependencies>
-
+    <properties>
+        <maven.compiler.target>1.11</maven.compiler.target>
+        <maven.compiler.source>1.11</maven.compiler.source>
+    </properties>
+    <dependencies>
+    </dependencies>
 
 
 </project>
