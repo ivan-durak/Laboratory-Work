@@ -7,7 +7,7 @@ import static org.testng.Assert.*;
 
 public class IdentityFunctionTest {
     @Test
-    public void testOfApply() {
+    public void testOfApplyIdentityFunction() {
         double value = 45;
         IdentityFunction object = new IdentityFunction();
         Assert.assertEquals(object.apply(value), value);
