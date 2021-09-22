@@ -10,6 +10,6 @@ public class CubeFunctionTest {
     public void testOfApplyCubeFunction() {
         double value = 28;
         CubeFunction object = new CubeFunction();
-        Assert.assertEquals(object.apply(value), value * value *value);
+        Assert.assertEquals(object.apply(value), value * value * value);
     }
 }

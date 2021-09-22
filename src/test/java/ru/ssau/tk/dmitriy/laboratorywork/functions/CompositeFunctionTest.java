@@ -11,7 +11,6 @@ public class CompositeFunctionTest {
         IdentityFunction firstFunction = new IdentityFunction();
         SquareFunction secondFunction = new SquareFunction();
         CubeFunction thirdFunction = new CubeFunction();
-        ReverseFunction fourthFunction = new ReverseFunction();
         CompositeFunction complexFunction = new CompositeFunction(firstFunction, secondFunction);
         CompositeFunction complexX2Function = new CompositeFunction(complexFunction, secondFunction);
         CompositeFunction complexX3Function = new CompositeFunction(complexX2Function, thirdFunction);

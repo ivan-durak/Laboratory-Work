@@ -10,6 +10,6 @@ public class ReverseFunctionTest {
     public void testOfApplyReverseFunction() {
         double value = 28;
         ReverseFunction object = new ReverseFunction();
-        Assert.assertEquals(object.apply(value), 1/value);
+        Assert.assertEquals(object.apply(value), 1 / value);
     }
 }

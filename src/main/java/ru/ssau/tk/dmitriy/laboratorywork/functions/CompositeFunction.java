@@ -1,8 +1,8 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 public class CompositeFunction implements MathFunction {
-    private MathFunction firstFunction;
-    private MathFunction secondFunction;
+    private final MathFunction firstFunction;
+    private final MathFunction secondFunction;
 
     public CompositeFunction(MathFunction internalFunction, MathFunction externalFunction) {
         firstFunction = internalFunction;

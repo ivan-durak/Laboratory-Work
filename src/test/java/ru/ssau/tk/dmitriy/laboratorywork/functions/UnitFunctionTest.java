@@ -10,6 +10,6 @@ public class UnitFunctionTest {
     public void testOfApplyUnitFunction() {
         double value = 5;
         UnitFunction object = new UnitFunction(1);
-        Assert.assertEquals(object.apply(value), 1,0.00001);
+        Assert.assertEquals(object.apply(value), 1, 0.00001);
     }
 }

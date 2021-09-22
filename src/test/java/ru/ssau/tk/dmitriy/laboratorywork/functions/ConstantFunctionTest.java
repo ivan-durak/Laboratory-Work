@@ -10,6 +10,6 @@ public class ConstantFunctionTest {
     public void testOfApplyConstantFunction() {
 
         ConstantFunction object = new ConstantFunction(28);
-        Assert.assertEquals(object.apply(26),28,0.0000001);
+        Assert.assertEquals(object.apply(26), 28, 0.0000001);
     }
 }
