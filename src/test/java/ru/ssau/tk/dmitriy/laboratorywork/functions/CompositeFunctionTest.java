@@ -15,14 +15,13 @@ public class CompositeFunctionTest {
         CompositeFunction complexX2Function = new CompositeFunction(complexFunction, secondFunction);
         CompositeFunction complexX3Function = new CompositeFunction(complexX2Function, thirdFunction);
         CompositeFunction complexX4Function = new CompositeFunction(complexX2Function, complexX3Function);
-        double value = 12;
-        double result = complexFunction.apply(12);
-        double resultX2 = complexX2Function.apply(12);
-        double resultX3 = complexX3Function.apply(12);
-        double resultX4 = complexX4Function.apply(12);
-        Assert.assertEquals(complexFunction.apply(value), result);
-        Assert.assertEquals(complexX2Function.apply(value), resultX2);
-        Assert.assertEquals(complexX3Function.apply(value), resultX3);
-        Assert.assertEquals(complexX4Function.apply(value), resultX4);
+        double value = 5;
+        Assert.assertEquals(complexFunction.apply(value), 25.0, 0.00001);
+        Assert.assertEquals(complexX2Function.apply(value), 625.0, 0.00001);
+        Assert.assertEquals(complexX3Function.apply(value), 244140625.0, 0.00001);
+        Assert.assertEquals(complexX4Function.apply(value), 3552713678800500929355621337890625.0, 0.00001);
+        Assert.assertEquals(complexFunction.apply(Double.POSITIVE_INFINITY), Double.POSITIVE_INFINITY, 0.00001);
+        Assert.assertEquals(complexFunction.apply(Double.NEGATIVE_INFINITY), Double.POSITIVE_INFINITY, 0.00001);
+        Assert.assertEquals(complexFunction.apply(Double.NaN), Double.NaN, 0.00001);
     }
 }
