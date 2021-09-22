@@ -7,7 +7,7 @@ import static org.testng.Assert.*;
 
 public class ReverseFunctionTest {
     @Test
-    public void testOfApplyCubeFunction() {
+    public void testOfApplyReverseFunction() {
         double value = 28;
         ReverseFunction object = new ReverseFunction();
         Assert.assertEquals(object.apply(value), 1/value);
