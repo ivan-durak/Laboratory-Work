@@ -8,8 +8,8 @@ import static org.testng.Assert.*;
 public class ConstantFunctionTest {
     @Test
     public void testOfApplyConstantFunction() {
-        double value = 28;
+
         ConstantFunction object = new ConstantFunction(28);
-        Assert.assertEquals(object.apply(value), value= object.getConstant());
+        Assert.assertEquals(object.apply(26),28,0.0000001);
     }
 }
