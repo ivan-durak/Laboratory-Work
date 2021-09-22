@@ -3,8 +3,8 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 public class ConstantFunction implements MathFunction {
     private final double constant;
 
-    public ConstantFunction(double theConstant) {
-        constant = theConstant;
+    public ConstantFunction(double constant) {
+        this.constant = constant;
     }
 
     public double getConstant() {
