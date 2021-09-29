@@ -53,7 +53,7 @@ public class LinkedListTabulatedFunction {
 
     private Node getNode(int index) {    //метод поиска узла по индексу
         if (index == 0) return head;
-        if (index <= (count / 2)) {        //если узел ближе к концу, то идем в обратном направлении
+        if (index <= (double) count / 2) {        //если узел ближе к концу, то идем в обратном направлении
             Node desiredNode = null;     //это описано в блоке else
             Node help = head;
             for (int i = 0; i < index; i++) {
