@@ -1,7 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
-//TODO: когда абстрактный класс будет написан, добавить его в описание данного класса
-public class LinkedListTabulatedFunction {
+
+public class LinkedListTabulatedFunction {//TODO: когда абстрактный класс будет написан, добавить его в описание данного класса
     private int count = 0;
     private Node head;
 
@@ -53,30 +53,27 @@ public class LinkedListTabulatedFunction {
 
     private Node getNode(int index) {    //метод поиска узла по индексу
         if (index == 0) return head;
-        if (index <= (double) count / 2) {        //если узел ближе к концу, то идем в обратном направлении
-            Node desiredNode = null;     //это описано в блоке else
-            Node help = head;
-            for (int i = 0; i < index; i++) {
+        Node desiredNode = null;
+        Node help = head;
+        if (index <= (double) count / 2) {   //если узел ближе к концу, то идем в обратном направлении
+            for (int i = 0; i < index; i++) {//это описано в блоке else
                 help = help.next;
                 desiredNode = help;
             }
-            return desiredNode;
         } else {
-            Node desiredNode = null;
-            Node help = head;
             for (int i = 0; i < (count - index); i++) {
                 help = help.prev;
                 desiredNode = help;
             }
-            return desiredNode;
         }
+        return desiredNode;
     }
 
-    public double getX(int index) { //НЕ ДОЛЖЕН ВЫЗЫВАТЬСЯ ДЛЯ ПЕРВОГО ЭЛЕМЕНТА ТАБЛИЦЫ
+    public double getX(int index) {
         return getNode(index).x;
     }
 
-    public double getY(int index) { //НЕ ДОЛЖЕН ВЫЗЫВАТЬСЯ ДЛЯ ПЕРВОГО ЭЛЕМЕНТА ТАБЛИЦЫ
+    public double getY(int index) {
         return getNode(index).y;
     }
 
@@ -95,20 +92,22 @@ public class LinkedListTabulatedFunction {
 
     public int indexOfY(double y) {  //можно переписать с getY(), если
         Node help = head;            //если скажут
-        int i;                       //в цикле идем по списку в одну сторону, при совпадении значения у и аргумента
-        for (i = 0; i < count; i++) {//мгновенный выход из метода
-            if (help.y == y) return i;
+        for (int i = 0; i < count; i++) {//в цикле идем по списку в одну сторону, при совпадении значения у и аргумента
+            if (help.y == y) return i;   //мгновенный выход из метода
             help = help.next;
         }
         return -1;
     }
 
+    /**
+     * из-за особенностей реализации здесь не может быть вызван floorNodeOfX(), т.к. в таком случае мы не сможем
+     * определить частные случаи возвращения 0 и count
+     */
     public int floorIndexOfX(double x) {
         Node help = head;
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
         double difference = 0;
-        int i;
-        for (i = 0; i < count; i++) {  //проходимся в цикле по списку от начала и до конца
+        for (int i = 0; i < count; i++) {  //проходимся в цикле по списку от начала и до конца
             if (help.x == x)
                 return i; //взято из indexOfX, можно было вызывать сам этот метод, но зачем ради одной строки
             if ((difference = x - help.x) > 0) {//здесь находится самый максимальный х в списке, который меньше переданного
@@ -116,11 +115,30 @@ public class LinkedListTabulatedFunction {
             }                                   //если какой-то х совпадет, то это будет отловлено двумя строчками выше
             help = help.next;
         }
-        if (outPut == null) {                   //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
-            if (difference < 0)
-                return 0;       //выполнение условия: если все х больше переданного, т.к. все х упорядочены
-        } else if (difference > 0) return count;//IDEA говорит, что outPut может сгенерировать NullPointerException,
-        return indexOfX(outPut.x);              // но по логике она никогда не будет пустой
+        if (outPut == null) {
+            if (difference < 0)     //выполнение условия: если все х больше переданного, т.к. все х упорядочены
+                return 0;
+        } else if (difference > 0) //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
+            return count;
+        return indexOfX(outPut.x); //IDEA говорит, что outPut может сгенерировать NullPointerException, но по логике она никогда не будет пустой
+    }
+
+    /**
+     * взята реализация floorIndexOfX(),т.к. этот метод был написан раньше по схожему принципу
+     * для повышения производительности
+     *
+     * тест для этого метода написан в тесте для метода floorIndexOfX(), там сравниваются индексы возращенных элементов
+     */
+    protected Node floorNodeOfX(double x) {
+        Node outPut = null;
+        Node help = head;
+        for (int i = 0; i < count; i++) {
+            if (x - help.x > 0) {
+                outPut = help;
+            } else break;
+            help = help.next;
+        }
+        return outPut;
     }
 
     protected double extrapolateLeft(double x) {
@@ -144,5 +162,18 @@ public class LinkedListTabulatedFunction {
         Node helpNode = getNode(floorIndex);  //(k-1)-ый индекс
         return helpNode.y + ((helpNode.next.y - helpNode.y) / (helpNode.next.x - helpNode.x)) * (x - helpNode.x);
     }
-    //TODO: сделать задание со звездочкой+тесты и 3*
+
+    protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) { //для метода apply()
+        if (count == 1) return head.x;
+        return leftY + ((rightY - leftY) / (rightX - leftX)) * (x - leftX);
+    }
+    //TODO: сделать 3* и тест для apply(), последнее после добавления абстрактного класса
+
+    public double apply(double x) {
+        if (x < head.x) return extrapolateLeft(x);//левая экстраполяция для х меньше самого левого
+        if (x > head.prev.x) return extrapolateRight(x);//правая экстраполяция для х больше самого правого
+        Node desiredNode = floorNodeOfX(x);          //получаем нужный узел
+        return interpolate(x, desiredNode.x, desiredNode.next.x, desiredNode.y, desiredNode.next.y);
+    }
 }
+
