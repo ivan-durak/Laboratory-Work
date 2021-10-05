@@ -1,13 +1,13 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 public interface TabulatedFunction extends MathFunction {
-    int getCountOfTabulatedValues();
+    int getCount();
 
-    double getValueOfX(int index);
+    double getX(int index);
 
-    double getValueOfY(int index);
+    double getY(int index);
 
-    void setValueOfY(int index, double value);
+    void setY(int index, double value);
 
     int indexOfX(double x);
 
