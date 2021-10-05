@@ -11,8 +11,8 @@ public class IdentityFunctionTest {
         double value = 45;
         IdentityFunction object = new IdentityFunction();
         Assert.assertEquals(object.apply(value), value);
-        Assert.assertEquals(object.apply(Double.POSITIVE_INFINITY),Double.POSITIVE_INFINITY,0.00001);
-        Assert.assertEquals(object.apply(Double.NEGATIVE_INFINITY),Double.NEGATIVE_INFINITY,0.00001);
-        Assert.assertEquals(object.apply(Double.NaN),Double.NaN,0.00001);
+        Assert.assertEquals(object.apply(Double.POSITIVE_INFINITY), Double.POSITIVE_INFINITY, 0.00001);
+        Assert.assertEquals(object.apply(Double.NEGATIVE_INFINITY), Double.NEGATIVE_INFINITY, 0.00001);
+        Assert.assertEquals(object.apply(Double.NaN), Double.NaN, 0.00001);
     }
 }
