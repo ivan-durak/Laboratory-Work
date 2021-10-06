@@ -107,10 +107,13 @@ public class ArrayTabulateFunctionTest {
 
     @Test
     public void testRemove() {
-        Assert.assertEquals(arrayTabulateObject.getCount(), 4);
-        arrayTabulateObject.remove(2);
-        Assert.assertEquals(arrayTabulateObject.getCount(), 3);
-        Assert.assertEquals(arrayTabulateObject.getX(2), 6.0);
-        Assert.assertEquals(arrayTabulateObject.getY(2), 5.1);
+        double[] xValues = new double[]{2.1, 3.4, 5.2, 6};
+        double[] yValues = new double[]{-2.4, 1.2, 3, 5.1};
+        ArrayTabulateFunction arrayTabulateObjectThree = new ArrayTabulateFunction(xValues, yValues);
+        Assert.assertEquals(arrayTabulateObjectThree.getCount(), 4);
+        arrayTabulateObjectThree.remove(2);
+        Assert.assertEquals(arrayTabulateObjectThree.getCount(), 3);
+        Assert.assertEquals(arrayTabulateObjectThree.getX(2), 6.0);
+        Assert.assertEquals(arrayTabulateObjectThree.getY(2), 5.1);
     }
 }
