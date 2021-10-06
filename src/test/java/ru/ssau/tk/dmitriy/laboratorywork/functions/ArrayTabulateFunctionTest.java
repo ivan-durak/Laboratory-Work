@@ -6,48 +6,48 @@ import org.testng.annotations.Test;
 
 public class ArrayTabulateFunctionTest {
     static final double DELTA = 0.0001;
-    static double[] xValues = new double[]{3.4, 5.2, 6, 2.1};
+    static double[] xValues = new double[]{2.1, 3.4, 5.2, 6};
     static double[] yValues = new double[]{-2.4, 1.2, 3, 5.1};
-    static SquareFunction SqObject = new SquareFunction();
+    static SquareFunction sqObject = new SquareFunction();
     static ArrayTabulateFunction arrayTabulateObject = new ArrayTabulateFunction(xValues, yValues);
-    static ArrayTabulateFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(SqObject, 1.2, 67.2, 100);
+    static ArrayTabulateFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
 
     @Test
-    public static void testArrayTabulatedFunctionWithTwoParameters() {
+    public void testArrayTabulatedFunctionWithTwoParameters() {
         Assert.assertEquals(arrayTabulateObject.getCount(), 4);
     }
 
     @Test
-    public static void testGetCount() {
+    public void testGetCount() {
         Assert.assertEquals(arrayTabulateObjectTwo.getCount(), 100);
     }
 
     @Test
-    public static void testGetX() {
+    public void testGetX() {
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.getX(element), element * (67.2 - 1.2) / 100.0 + 1.2, DELTA);
         }
     }
 
     @Test
-    public static void testGetY() {
+    public void testGetY() {
         for (int element = 0; element < 99; element++) {
-            Assert.assertEquals(arrayTabulateObjectTwo.getY(element), SqObject.apply(arrayTabulateObjectTwo.getX(element)), DELTA);
+            Assert.assertEquals(arrayTabulateObjectTwo.getY(element), sqObject.apply(arrayTabulateObjectTwo.getX(element)), DELTA);
         }
     }
 
     @Test
-    public static void testLeftBound() {
+    public void testLeftBound() {
         Assert.assertEquals(arrayTabulateObjectTwo.leftBound(), 1.2, DELTA);
     }
 
     @Test
-    public static void testRightBound() {
+    public void testRightBound() {
         Assert.assertEquals(arrayTabulateObjectTwo.rightBound(), 67.2, DELTA);
     }
 
     @Test
-    public static void testIndexOfX() {
+    public void testIndexOfX() {
         Assert.assertEquals(arrayTabulateObjectTwo.indexOfX(1.1), -1, DELTA);
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.indexOfX(1.2 + element * 0.66), element);
@@ -55,15 +55,15 @@ public class ArrayTabulateFunctionTest {
     }
 
     @Test
-    public static void testIndexOfY() {
+    public void testIndexOfY() {
         Assert.assertEquals(arrayTabulateObjectTwo.indexOfY(0.432), -1, DELTA);
         for (int element = 0; element < 99; element++) {
-            Assert.assertEquals(arrayTabulateObjectTwo.indexOfY(SqObject.apply(arrayTabulateObjectTwo.getX(element))), element);
+            Assert.assertEquals(arrayTabulateObjectTwo.indexOfY(sqObject.apply(arrayTabulateObjectTwo.getX(element))), element);
         }
     }
 
     @Test
-    public static void testFloorIndexOfX() {
+    public void testFloorIndexOfX() {
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(1.2 + element * 0.66), element);
         }
@@ -73,16 +73,44 @@ public class ArrayTabulateFunctionTest {
     }
 
     @Test
-    public static void testExtrapolateLeft() {
+    public void testExtrapolateLeft() {
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateLeft(1.1), 1.1340000000000003, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateLeft(0.9), 0.5220000000000002, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateLeft(Double.NEGATIVE_INFINITY), Double.NEGATIVE_INFINITY);
     }
 
     @Test
-    public static void testExtrapolateRight() {
+    public void testExtrapolateRight() {
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(67.3), 4529.147999999999, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(69), 4755.383999999999, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(Double.POSITIVE_INFINITY), Double.POSITIVE_INFINITY);
+    }
+
+    @Test
+    public void testInsert() {
+        arrayTabulateObject.insert(3.4, 5); //если х найден в массиве
+        Assert.assertEquals(arrayTabulateObject.getY(1), 5.0);
+        Assert.assertEquals(arrayTabulateObject.getCount(), 4);
+        arrayTabulateObject.insert(2, 2.5);//если х меньше левой границы
+        Assert.assertEquals(arrayTabulateObject.getCount(), 5);
+        Assert.assertEquals(arrayTabulateObject.getX(0), 2.0);
+        Assert.assertEquals(arrayTabulateObject.getY(0), -2.9692307, DELTA);
+        arrayTabulateObject.insert(7, 4);  //если х больше правой границы
+        Assert.assertEquals(arrayTabulateObject.getX(5), 7.0, DELTA);
+        Assert.assertEquals(arrayTabulateObject.getY(5), 7.725, DELTA);
+        Assert.assertEquals(arrayTabulateObject.getCount(), 6);
+        arrayTabulateObject.insert(4, 2.9); //если х внутри интервала значений
+        Assert.assertEquals(arrayTabulateObject.getCount(), 7);
+        Assert.assertEquals(arrayTabulateObject.getX(3), 4.0);
+        Assert.assertEquals(arrayTabulateObject.getY(3), 4.33333, DELTA);
+    }
+
+    @Test
+    public void testRemove() {
+        Assert.assertEquals(arrayTabulateObject.getCount(), 4);
+        arrayTabulateObject.remove(2);
+        Assert.assertEquals(arrayTabulateObject.getCount(), 3);
+        Assert.assertEquals(arrayTabulateObject.getX(2), 6.0);
+        Assert.assertEquals(arrayTabulateObject.getY(2), 5.1);
     }
 }
