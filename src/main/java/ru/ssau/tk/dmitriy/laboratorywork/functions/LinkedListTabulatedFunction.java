@@ -1,7 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private int count = 0;
     private Node head;
 
@@ -22,9 +22,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     }
 
     private void addNode(double x, double y) {  //метод добавления точки в список
-        Node newNode = new Node();              //конструктор по умолчанию
-        newNode.x = x;
-        newNode.y = y;
+        Node newNode = new Node(x, y);              //конструктор по умолчанию
         if (head == null) {
             head = newNode;
             newNode.next = newNode; //голова списка должна ссылаться на саму себя
@@ -173,6 +171,40 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         if (x > head.prev.x) return extrapolateRight(x);//правая экстраполяция для х больше самого правого
         Node desiredNode = floorNodeOfX(x);          //получаем нужный узел
         return interpolate(x, desiredNode.x, desiredNode.next.x, desiredNode.y, desiredNode.next.y);
+    }
+
+    public void insert(double x, double y) {
+        Node temp = head;
+        for (int i = 1; i < count; i++) {
+            if (temp.x == x) {
+                temp.y = y;
+                break;
+            } else if (temp.x > x) {
+                Node newNode = new Node(x, y);
+                newNode.next = temp;
+                newNode.prev = temp.prev;
+                temp.prev.next = newNode;
+                temp.prev = newNode;
+                count++;
+                break;
+            }
+            temp = temp.next;
+        }
+    }
+
+    public void remove(int index) {
+        Node temp = head;
+        for (int i = 0; i < count; i++) {
+            if (i == index) {
+                temp.prev.next = temp.next;
+                temp.next.prev = temp.prev;
+                temp.next = null;
+                temp.prev = null;
+                count--;
+                break;
+            }
+            temp = temp.next;
+        }
     }
 }
 
