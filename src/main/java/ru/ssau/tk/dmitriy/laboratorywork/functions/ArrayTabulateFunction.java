@@ -7,7 +7,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     private double[] xValues;
     private double[] yValues;
     private int count = 0;
-    
+
     public ArrayTabulateFunction(double[] xValues, double[] yValues) {
 
         count = xValues.length;
