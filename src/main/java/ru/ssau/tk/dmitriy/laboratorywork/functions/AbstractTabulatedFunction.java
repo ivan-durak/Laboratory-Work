@@ -1,6 +1,14 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
+    public abstract int getCount();
+
+    public abstract double getX(int index);
+
+    public abstract double getY(int index);
+
+    public abstract void setY(int index, double value);
+
     protected abstract int floorIndexOfX(double x);
 
     protected abstract double extrapolateLeft(double x);
@@ -8,19 +16,13 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
     protected abstract double extrapolateRight(double x);
 
     protected abstract double interpolate(double x, int floorIndex);
-    public abstract int  getCount ();
-    public abstract double  getX ( int  index );
-    public abstract  double  getY ( int  index );
-    public abstract  void  setY ( int  index , double  value );
 
-    protected double interpolate(double x, double leftx, double rightx, double y, double lefty, double righty) {
-        return (lefty + (x - leftx) * (righty - lefty) / (rightx - leftx));
+    protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) {
+        return leftY + (x - leftX) * (rightY - leftY) / (rightX - leftX);
 
     }
 
-
     @Override
-
     public double apply(double x) {
         if (x < leftBound()) {
             return extrapolateLeft(x);

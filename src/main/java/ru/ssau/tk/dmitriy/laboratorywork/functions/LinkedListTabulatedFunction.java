@@ -1,7 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 
-public class LinkedListTabulatedFunction implements Insertable {//TODO: когда абстрактный класс будет написан, добавить его в описание данного класса
+public class LinkedListTabulatedFunction {//TODO: когда абстрактный класс будет написан, добавить его в описание данного класса
     private int count = 0;
     private Node head;
 
@@ -174,26 +174,6 @@ public class LinkedListTabulatedFunction implements Insertable {//TODO: когд
         if (x > head.prev.x) return extrapolateRight(x);//правая экстраполяция для х больше самого правого
         Node desiredNode = floorNodeOfX(x);          //получаем нужный узел
         return interpolate(x, desiredNode.x, desiredNode.next.x, desiredNode.y, desiredNode.next.y);
-    }
-
-    @Override
-    public void insert(double x, double y) {
-        Node temp = head;
-        for (int i = 1; i < count; i++) {
-            if (temp.x == x) {
-                temp.y = y;
-                break;
-            } else if (temp.x > x) {
-                Node newNode = new Node(x,y);
-                newNode.next = temp;
-                newNode.prev = temp.prev;
-                temp.prev.next = newNode;
-                temp.prev = newNode;
-                count++;
-                break;
-            }
-            temp = temp.next;
-        }
     }
 }
 
