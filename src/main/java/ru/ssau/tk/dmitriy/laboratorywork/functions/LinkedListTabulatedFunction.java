@@ -14,8 +14,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         head = null;
-        double step = (xTo - xFrom) / (count - 1); //интервал дискретизации
-        for (int i = 0; i <= count - 1; i++) {
+        double step = (xTo - xFrom) / count; //интервал дискретизации
+        for (int i = 0; i <= count; i++) {
             double value = xFrom + step * i;       //передаваемое значение х, отсчет с xFrom
             addNode(value, source.apply(value));   //y-результат функции source
         }
