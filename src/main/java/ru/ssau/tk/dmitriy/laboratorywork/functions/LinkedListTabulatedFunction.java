@@ -82,7 +82,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     public int indexOfX(double x) { //можно переписать с getX(),
         Node help = head;           //если скажут
         for (int i = 0; i <= count; i++) {
-            if (help.x == x) return i;
+            if (help.x == x) {
+                return i;
+            }
             help = help.next;
         }
         return -1;
@@ -91,7 +93,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     public int indexOfY(double y) {  //можно переписать с getY(), если
         Node help = head;            //если скажут
         for (int i = 0; i < count; i++) {//в цикле идем по списку в одну сторону, при совпадении значения у и аргумента
-            if (help.y == y) return i;   //мгновенный выход из метода
+            if (help.y == y) {
+                return i;    //мгновенный выход из метода
+            }
             help = help.next;
         }
         return -1;
@@ -106,18 +110,21 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
         double difference = 0;
         for (int i = 0; i < count; i++) {  //проходимся в цикле по списку от начала и до конца
-            if (help.x == x)
-                return i; //взято из indexOfX, можно было вызывать сам этот метод, но зачем ради одной строки
+            if (help.x == x) {
+                return i;
+            } //взято из indexOfX, можно было вызывать сам этот метод, но зачем ради одной строки
             if ((difference = x - help.x) > 0) {//здесь находится самый максимальный х в списке, который меньше переданного
                 outPut = help;                  //сохраняем ссылку на него
             }                                   //если какой-то х совпадет, то это будет отловлено двумя строчками выше
             help = help.next;
         }
         if (outPut == null) {
-            if (difference < 0)     //выполнение условия: если все х больше переданного, т.к. все х упорядочены
+            if (difference < 0) {     //выполнение условия: если все х больше переданного, т.к. все х упорядочены
                 return 0;
-        } else if (difference > 0) //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
+            }
+        } else if (difference > 0) { //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
             return count;
+        }
         return indexOfX(outPut.x); //IDEA говорит, что outPut может сгенерировать NullPointerException, но по логике она никогда не будет пустой
     }
 
@@ -133,7 +140,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         for (int i = 0; i < count; i++) {
             if (x - help.x > 0) {
                 outPut = help;
-            } else break;
+            } else {
+                break;
+            }
             help = help.next;
         }
         return outPut;
@@ -143,27 +152,25 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (count == 1) return head.x;
         Node firstHelpNode = head;       //начинаем с головы, поэтому метод получения узла не вызывается
         Node secondHelpNode = head.next;
-        return firstHelpNode.y + ((secondHelpNode.y - firstHelpNode.y) / (secondHelpNode.x - firstHelpNode.x))//
-                * (x - firstHelpNode.x);
+        return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
     }
 
     protected double extrapolateRight(double x) {
         if (count == 1) return head.x;
         Node secondHelpNode = head.prev;       //начинаем с головы, поэтому метод получения узла не вызывается
         Node firstHelpNode = secondHelpNode.prev;//поменяны индексы местами в соответствии с формулой
-        return firstHelpNode.y + ((secondHelpNode.y - firstHelpNode.y) / (secondHelpNode.x - firstHelpNode.x))//
-                * (x - firstHelpNode.x);
+        return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
     }
 
     protected double interpolate(double x, int floorIndex) {
         if (count == 1) return head.x;
         Node helpNode = getNode(floorIndex);  //(k-1)-ый индекс
-        return helpNode.y + ((helpNode.next.y - helpNode.y) / (helpNode.next.x - helpNode.x)) * (x - helpNode.x);
+        return super.interpolate(x, helpNode.x, helpNode.next.x, helpNode.y, helpNode.next.y);
     }
 
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) { //для метода apply()
         if (count == 1) return head.x;
-        return leftY + ((rightY - leftY) / (rightX - leftX)) * (x - leftX);
+        return super.interpolate(x, leftX, rightX, leftY, rightY);
     }
 
     public double apply(double x) {

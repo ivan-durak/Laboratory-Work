@@ -5,12 +5,12 @@ import org.testng.annotations.Test;
 
 
 public class ArrayTabulateFunctionTest {
-    static final double DELTA = 0.0001;
-    static double[] xValues = new double[]{2.1, 3.4, 5.2, 6};
-    static double[] yValues = new double[]{-2.4, 1.2, 3, 5.1};
-    static SquareFunction sqObject = new SquareFunction();
-    static ArrayTabulateFunction arrayTabulateObject = new ArrayTabulateFunction(xValues, yValues);
-    static ArrayTabulateFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+    private static final double DELTA = 0.0001;
+    public static double[] xValues = new double[]{2.1, 3.4, 5.2, 6};
+    public static double[] yValues = new double[]{-2.4, 1.2, 3, 5.1};
+    public static SquareFunction sqObject = new SquareFunction();
+    public static ArrayTabulateFunction arrayTabulateObject = new ArrayTabulateFunction(xValues, yValues);
+    public static ArrayTabulateFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
 
     @Test
     public void testArrayTabulatedFunctionWithTwoParameters() {

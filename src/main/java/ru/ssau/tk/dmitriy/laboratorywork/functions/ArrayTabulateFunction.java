@@ -26,8 +26,6 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
         for (int element = 1; element < count - 1; element++) {
             xValues[element] = xValues[element - 1] + intervalSplittingStep;
             yValues[element] = source.apply(xValues[element]);
-
-
         }
         this.count = count;
         this.xValues = Arrays.copyOf(xValues, count);
@@ -68,7 +66,9 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     @Override
     public int indexOfX(double x) {
         for (int element = 0; element < this.count; element++) {
-            if (Math.abs(xValues[element] - x) < 0.0001) return element;
+            if (Math.abs(xValues[element] - x) < 0.0001) {
+                return element;
+            }
         }
         return -1;
     }
@@ -76,7 +76,9 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     @Override
     public int indexOfY(double y) {
         for (int element = 0; element < this.count; element++) {
-            if (Math.abs(yValues[element] - y) < 0.0001) return element;
+            if (Math.abs(yValues[element] - y) < 0.0001) {
+                return element;
+            }
         }
         return -1;
     }
@@ -84,28 +86,37 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     @Override
     public int floorIndexOfX(double x) {
         for (int element = 0; element < this.count; element++) {
-            if (Math.abs(xValues[element] - x) < 0.0001) return element;
+            if (Math.abs(xValues[element] - x) < 0.0001) {
+                return element;
+            }
         }
         for (int element = 0; element < this.count; element++) {
-            if (x < xValues[element] && element != 0) return element - 1;
-            if (x < xValues[element]) return 0;
+            if (x < xValues[element] && element != 0) {
+                return element - 1;
+            }
+            if (x < xValues[element]) {
+                return 0;
+            }
         }
         return this.count;
     }
 
     @Override
     public double extrapolateLeft(double x) {
-        return yValues[0] + (yValues[1] - yValues[0]) * (x - xValues[0]) / (xValues[1] - xValues[0]);
+        if (count == 1) return xValues[0];
+        return super.interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     public double extrapolateRight(double x) {
-        return yValues[count - 2] + ((yValues[count - 1] - yValues[count - 2]) * (x - xValues[count - 2])) / (xValues[count - 1] - xValues[count - 2]);
+        if (count == 1) return xValues[0];
+        return super.interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
 
     @Override
     public double interpolate(double x, int floorIndex) {
-        return yValues[floorIndex] + (yValues[floorIndex + 1] - yValues[floorIndex]) * (x - xValues[floorIndex]) / (xValues[floorIndex + 1] - xValues[floorIndex]);
+        if (count == 1) return xValues[0];
+        return super.interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
     @Override
@@ -121,27 +132,23 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
                 xValues = newXValues;
                 yValues = newYValues;
             }
+            int index;
+            double help;
             if (x < leftBound()) { //х меньше левой границы
-                double help = extrapolateLeft(x);//если мы сначала скопируем, то там будет 0 и получится неправильное значение
-                System.arraycopy(xValues, 0, xValues, 1, count);
-                System.arraycopy(yValues, 0, yValues, 1, count);
-                xValues[0] = x;
-                yValues[0] = help;
-                count++;
-                return;
+                index = 0;
+                help = extrapolateLeft(x);
+            } else if (x > rightBound()) {//х больше правой границы
+                index = count;
+                help = extrapolateRight(x);
+            } else {//х в интервале таблицы
+                index = floorIndexOfX(x);
+                help = interpolate(x, index);
+                index++;
             }
-            if (x > rightBound()) {//х больше правой границы
-                xValues[count] = x;
-                yValues[count] = extrapolateRight(x);
-                count++;
-                return;
-            }  //дальше код, который выполнится при условии, что есть еще не занятые ячейки в массиве и х находится
-            int nearestIndex = floorIndexOfX(x);  //между табличными значениями х
-            double help = interpolate(x, nearestIndex);
-            System.arraycopy(xValues, nearestIndex + 1, xValues, nearestIndex + 2, (count - 1) - nearestIndex);
-            System.arraycopy(yValues, nearestIndex + 1, yValues, nearestIndex + 2, (count - 1) - nearestIndex);
-            xValues[nearestIndex + 1] = x;
-            yValues[nearestIndex + 1] = help;
+            System.arraycopy(xValues, index, xValues, index + 1, count - index);
+            System.arraycopy(yValues, index, yValues, index + 1, count - index);
+            xValues[index] = x;
+            yValues[index] = help;
             count++;
         }
     }
