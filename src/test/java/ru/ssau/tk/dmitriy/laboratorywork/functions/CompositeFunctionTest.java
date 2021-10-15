@@ -28,15 +28,15 @@ public class CompositeFunctionTest {
     @Test
     public void testCompositeFunctionIncludingTabulatedFunctions() {
         SquareFunction squareFunction = new SquareFunction();
-        double[] arrayXValues = {1.5, 2.1, 2.8, 3.4, 3.9, 4.6, 5.4, 6.1, 7.0},
-                arrayYValues = {3.4, 5.6, 7.3, 8.9, 11.2, 12.9, 14.1, 15.6, 16.7};
+        double[] arrayXValues = {3, 4, 5, 6, 7, 8, 9},
+                arrayYValues = {-9, -12, -15, -18, -21, -24, -27};
         ArrayTabulateFunction arrayFunction = new ArrayTabulateFunction(arrayXValues, arrayYValues);
-        double[] linkXValues = {2.6, 3.5, 4.7, 5.5, 6.9, 7.1},
-                linkYValues = {12.5, 15.0, 17.8, 18.9, 21.2, 24.3};
+        double[] linkXValues = {1, 2, 3, 4, 5, 6, 7},
+                linkYValues = {2, 4, 6, 8, 10, 12, 14};
         LinkedListTabulatedFunction linkFunction = new LinkedListTabulatedFunction(linkXValues, linkYValues);
         CompositeFunction compositeFunction = linkFunction.andThen(arrayFunction).andThen(squareFunction);
-        Assert.assertEquals(compositeFunction.apply(5), 924.41335, 0.0001);
-        Assert.assertEquals(compositeFunction.apply(2), 457.32612, 0.0001);
-        Assert.assertEquals(compositeFunction.apply(0.1), 208.32111, 0.0001);
+        Assert.assertEquals(compositeFunction.apply(3.5), 441.0);
+        Assert.assertEquals(compositeFunction.apply(5), 900.0);
+        Assert.assertEquals(compositeFunction.apply(0.1), 0.36, 0.00001);
     }
 }
