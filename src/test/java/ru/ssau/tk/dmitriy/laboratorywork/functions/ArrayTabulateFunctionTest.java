@@ -178,4 +178,15 @@ public class ArrayTabulateFunctionTest {
             Assert.assertEquals(array.getY(i), newYValues[i]);
         }
     }
+
+    @Test
+    public void testApply() {
+        double[] xValues = new double[]{2.0, 2.9, 3.6, 4.5, 5.7, 6.3, 7.1};
+        double[] yValues = new double[]{5.9, 5.4, 4.9, 4.2, 3.7, 3.1, 2.4};
+        ArrayTabulateFunction array = new ArrayTabulateFunction(xValues, yValues);
+        Assert.assertEquals(array.apply(4.5), 4.2); //х найден в таблице
+        Assert.assertEquals(array.apply(1.8), 6.01111, DELTA); // х меньше левой границы
+        Assert.assertEquals(array.apply(7.5), 2.05, DELTA); // х больше правой границы
+        Assert.assertEquals(array.apply(5), 3.99166, DELTA); //х внутри некоторого интервала
+    }
 }

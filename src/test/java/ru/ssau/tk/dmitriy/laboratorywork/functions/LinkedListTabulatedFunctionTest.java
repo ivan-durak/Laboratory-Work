@@ -142,4 +142,14 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.interpolate(22.7, link.floorNodeOfX(22.7).x, link.floorNodeOfX(22.7).next.x,//
                 link.floorNodeOfX(22.7).y, link.floorNodeOfX(22.7).next.y), 515.5);
     }
+
+    @Test
+    public void testApply() {
+        double[] xValues = {2.3, 3.1, 4.6, 5.3, 6.7, 7.2, 8.0}, yValues = {1.0, 3.4, 5.2, 6.9, 7.5, 8.4, 9.8};
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(xValues, yValues);
+        Assert.assertEquals(link.apply(4.6), 5.2); // х найден в таблице
+        Assert.assertEquals(link.apply(2), 0.1, 0.00001); //х меньше левой границы
+        Assert.assertEquals(link.apply(8.5), 10.675); //х больше правой границы
+        Assert.assertEquals(link.apply(6), 7.2); //х внутри некоторого интервала
+    }
 }
