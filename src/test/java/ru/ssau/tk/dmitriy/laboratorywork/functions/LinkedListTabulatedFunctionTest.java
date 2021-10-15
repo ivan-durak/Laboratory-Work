@@ -72,7 +72,7 @@ public class LinkedListTabulatedFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         ReverseFunction reverseFunction = new ReverseFunction();
         CompositeFunction compositeFunction = new CompositeFunction(reverseFunction, squareFunction);
-        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 15);
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.indexOfY(17.5), -1);
         Assert.assertEquals(link.indexOfY(link.getY(6)), 6);
         Assert.assertEquals(link.indexOfY(link.getY(13)), 13);
@@ -83,7 +83,7 @@ public class LinkedListTabulatedFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         IdentityFunction identityFunction = new IdentityFunction();
         CompositeFunction compositeFunction = new CompositeFunction(identityFunction, squareFunction);
-        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 15);
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.floorIndexOfX(14.5), 4);
         Assert.assertEquals(link.floorIndexOfX(19.2), 9);
         Assert.assertEquals(link.floorIndexOfX(24.6), 14);
@@ -96,7 +96,7 @@ public class LinkedListTabulatedFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         IdentityFunction identityFunction = new IdentityFunction();
         CompositeFunction compositeFunction = new CompositeFunction(identityFunction, squareFunction);
-        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 15);
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.extrapolateLeft(9), 79.0);
         Assert.assertEquals(link.extrapolateLeft(7.5), 47.5);
         double[] xValues = {1}, yValues = {23};
@@ -109,7 +109,7 @@ public class LinkedListTabulatedFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         IdentityFunction identityFunction = new IdentityFunction();
         CompositeFunction compositeFunction = new CompositeFunction(identityFunction, squareFunction);
-        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 15);
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.extrapolateRight(26), 674.0);
         Assert.assertEquals(link.extrapolateRight(28.2), 781.8);
         double[] xValues = {5}, yValues = {23};
@@ -122,7 +122,7 @@ public class LinkedListTabulatedFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         IdentityFunction identityFunction = new IdentityFunction();
         CompositeFunction compositeFunction = new CompositeFunction(identityFunction, squareFunction);
-        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 15);
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.interpolate(14.5, link.floorIndexOfX(14.5)), 210.5);
         Assert.assertEquals(link.interpolate(22.3, link.floorIndexOfX(22.3)), 497.5, 0.00001);
         double[] xValues = {5}, yValues = {23};
@@ -136,7 +136,7 @@ public class LinkedListTabulatedFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         IdentityFunction identityFunction = new IdentityFunction();
         CompositeFunction compositeFunction = new CompositeFunction(identityFunction, squareFunction);
-        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 15);
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.interpolate(12.5, link.floorNodeOfX(12.5).x, link.floorNodeOfX(12.5).next.x,//
                 link.floorNodeOfX(12.5).y, link.floorNodeOfX(12.5).next.y), 156.5);
         Assert.assertEquals(link.interpolate(22.7, link.floorNodeOfX(22.7).x, link.floorNodeOfX(22.7).next.x,//

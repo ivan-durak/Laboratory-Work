@@ -14,8 +14,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         head = null;
-        double step = (xTo - xFrom) / count; //интервал дискретизации
-        for (int i = 0; i <= count; i++) {
+        double step = (xTo - xFrom) / (count - 1); //интервал дискретизации
+        for (int i = 0; i < count; i++) {
             double value = xFrom + step * i;       //передаваемое значение х, отсчет с xFrom
             addNode(value, source.apply(value));   //y-результат функции source
         }
@@ -37,14 +37,17 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         count++; //увеличение числа точек в списке
     }
 
+    @Override
     public int getCount() {
         return count;
     }
 
+    @Override
     public double leftBound() {
         return head.x;
     }
 
+    @Override
     public double rightBound() {
         return head.prev.x;
     }
@@ -67,18 +70,22 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return desiredNode;
     }
 
+    @Override
     public double getX(int index) {
         return getNode(index).x;
     }
 
+    @Override
     public double getY(int index) {
         return getNode(index).y;
     }
 
+    @Override
     public void setY(int index, double value) {
         getNode(index).y = value;
     }
 
+    @Override
     public int indexOfX(double x) { //можно переписать с getX(),
         Node help = head;           //если скажут
         for (int i = 0; i <= count; i++) {
@@ -90,6 +97,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return -1;
     }
 
+    @Override
     public int indexOfY(double y) {  //можно переписать с getY(), если
         Node help = head;            //если скажут
         for (int i = 0; i < count; i++) {//в цикле идем по списку в одну сторону, при совпадении значения у и аргумента
@@ -105,6 +113,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
      * из-за особенностей реализации здесь не может быть вызван floorNodeOfX(), т.к. в таком случае мы не сможем
      * определить частные случаи возвращения 0 и count
      */
+    @Override
     public int floorIndexOfX(double x) {
         Node help = head;
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
@@ -148,6 +157,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return outPut;
     }
 
+    @Override
     protected double extrapolateLeft(double x) {
         if (count == 1) return head.x;
         Node firstHelpNode = head;       //начинаем с головы, поэтому метод получения узла не вызывается
@@ -155,6 +165,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
     }
 
+    @Override
     protected double extrapolateRight(double x) {
         if (count == 1) return head.x;
         Node secondHelpNode = head.prev;       //начинаем с головы, поэтому метод получения узла не вызывается
@@ -162,24 +173,36 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
     }
 
+    @Override
     protected double interpolate(double x, int floorIndex) {
         if (count == 1) return head.x;
         Node helpNode = getNode(floorIndex);  //(k-1)-ый индекс
         return super.interpolate(x, helpNode.x, helpNode.next.x, helpNode.y, helpNode.next.y);
     }
 
+    @Override
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) { //для метода apply()
         if (count == 1) return head.x;
         return super.interpolate(x, leftX, rightX, leftY, rightY);
     }
 
+    @Override
     public double apply(double x) {
-        if (x < head.x) return extrapolateLeft(x);//левая экстраполяция для х меньше самого левого
-        if (x > head.prev.x) return extrapolateRight(x);//правая экстраполяция для х больше самого правого
-        Node desiredNode = floorNodeOfX(x);          //получаем нужный узел
+        if (x < head.x) { //левая экстраполяция для х меньше самого левого
+            return extrapolateLeft(x);
+        }
+        if (x > head.prev.x) { //правая экстраполяция для х больше самого правого
+            return extrapolateRight(x);
+        }
+        int index;
+        if ((index = indexOfX(x)) != -1) { //если такой х есть в таблице
+            return getY(index);
+        }
+        Node desiredNode = floorNodeOfX(x); //такого х нет, получаем нужный узел
         return interpolate(x, desiredNode.x, desiredNode.next.x, desiredNode.y, desiredNode.next.y);
     }
 
+    @Override
     public void insert(double x, double y) {
         Node temp = head;
         for (int i = 1; i < count; i++) {
@@ -199,6 +222,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
     }
 
+    @Override
     public void remove(int index) {
         Node temp = head;
         for (int i = 0; i < count; i++) {
