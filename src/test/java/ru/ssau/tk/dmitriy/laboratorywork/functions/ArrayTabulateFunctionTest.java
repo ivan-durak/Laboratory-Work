@@ -116,9 +116,9 @@ public class ArrayTabulateFunctionTest {
         array.insert(2, 2.5);//если х меньше левой границы
         Assert.assertEquals(array.getCount(), 5);
         Assert.assertEquals(array.getX(0), 2.0);
-        Assert.assertEquals(array.getY(0), -2.9692307, DELTA);
+        Assert.assertEquals(array.getY(0), 2.5, DELTA);
         double[] newXValues = new double[]{2.0, 2.1, 3.4, 5.2, 6};
-        newYValues = new double[]{-2.9692, -2.4, 5.0, 3, 5.1};
+        newYValues = new double[]{2.5, -2.4, 5.0, 3, 5.1};
         for (int i = 0; i < newXValues.length; i++) {
             Assert.assertEquals(array.getX(i), newXValues[i], DELTA);
         }
@@ -129,9 +129,9 @@ public class ArrayTabulateFunctionTest {
         array.insert(7, 4);  //если х больше правой границы
         Assert.assertEquals(array.getCount(), 6);
         Assert.assertEquals(array.getX(5), 7.0, DELTA);
-        Assert.assertEquals(array.getY(5), 7.725, DELTA);
+        Assert.assertEquals(array.getY(5), 4.0, DELTA);
         newXValues = new double[]{2.0, 2.1, 3.4, 5.2, 6, 7};
-        newYValues = new double[]{-2.9692, -2.4, 5.0, 3, 5.1, 7.725};
+        newYValues = new double[]{2.5, -2.4, 5.0, 3, 5.1, 4};
         for (int i = 0; i < newXValues.length; i++) {
             Assert.assertEquals(array.getX(i), newXValues[i], DELTA);
         }
@@ -142,9 +142,9 @@ public class ArrayTabulateFunctionTest {
         array.insert(4, 2.9); //если х внутри интервала значений
         Assert.assertEquals(array.getCount(), 7);
         Assert.assertEquals(array.getX(3), 4.0);
-        Assert.assertEquals(array.getY(3), 4.33333, DELTA);
+        Assert.assertEquals(array.getY(3), 2.9, DELTA);
         newXValues = new double[]{2.0, 2.1, 3.4, 4, 5.2, 6, 7};
-        newYValues = new double[]{-2.9692, -2.4, 5.0, 4.3333, 3, 5.1, 7.725};
+        newYValues = new double[]{2.5, -2.4, 5.0, 2.9, 3, 5.1, 4};
         for (int i = 0; i < newXValues.length; i++) {
             Assert.assertEquals(array.getX(i), newXValues[i], DELTA);
         }

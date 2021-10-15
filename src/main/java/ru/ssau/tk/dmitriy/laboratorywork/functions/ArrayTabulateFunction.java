@@ -9,7 +9,6 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     private int count = 0;
 
     public ArrayTabulateFunction(double[] xValues, double[] yValues) {
-
         count = xValues.length;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
@@ -30,7 +29,6 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
         this.count = count;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
-
     }
 
     @Override
@@ -133,22 +131,17 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
                 yValues = newYValues;
             }
             int index;
-            double help;
             if (x < leftBound()) { //х меньше левой границы
                 index = 0;
-                help = extrapolateLeft(x);
-            } else if (x > rightBound()) {//х больше правой границы
+            } else if (x > rightBound()) { //х больше правой границы
                 index = count;
-                help = extrapolateRight(x);
-            } else {//х в интервале таблицы
-                index = floorIndexOfX(x);
-                help = interpolate(x, index);
-                index++;
+            } else { //х в интервале таблицы
+                index = floorIndexOfX(x) + 1;
             }
             System.arraycopy(xValues, index, xValues, index + 1, count - index);
             System.arraycopy(yValues, index, yValues, index + 1, count - index);
             xValues[index] = x;
-            yValues[index] = help;
+            yValues[index] = y;
             count++;
         }
     }
