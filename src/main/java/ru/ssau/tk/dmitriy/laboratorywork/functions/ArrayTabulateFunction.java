@@ -101,27 +101,33 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
 
     @Override
     public double extrapolateLeft(double x) {
-        if (count == 1) return xValues[0];
+        if (count == 1) {
+            return xValues[0];
+        }
         return super.interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     public double extrapolateRight(double x) {
-        if (count == 1) return xValues[0];
+        if (count == 1) {
+            return xValues[0];
+        }
         return super.interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
 
     @Override
     public double interpolate(double x, int floorIndex) {
-        if (count == 1) return xValues[0];
+        if (count == 1) {
+            return xValues[0];
+        }
         return super.interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
     @Override
     public void insert(double x, double y) {
         if (indexOfX(x) != -1) { //если х найден в таблице
-            setY(indexOfX(x), y);//устанавливаем его значение
-        } else {                 //если не найден
+            setY(indexOfX(x), y);
+        } else {
             if (xValues.length - count == 0) {
                 double[] newXValues = new double[count + 5];
                 double[] newYValues = new double[count + 5];

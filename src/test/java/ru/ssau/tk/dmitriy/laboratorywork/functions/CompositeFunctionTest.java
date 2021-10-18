@@ -30,10 +30,10 @@ public class CompositeFunctionTest {
         SquareFunction squareFunction = new SquareFunction();
         double[] arrayXValues = {3, 4, 5, 6, 7, 8, 9},
                 arrayYValues = {-9, -12, -15, -18, -21, -24, -27};
-        ArrayTabulateFunction arrayFunction = new ArrayTabulateFunction(arrayXValues, arrayYValues);
+        TabulatedFunction arrayFunction = new ArrayTabulateFunction(arrayXValues, arrayYValues);
         double[] linkXValues = {1, 2, 3, 4, 5, 6, 7},
                 linkYValues = {2, 4, 6, 8, 10, 12, 14};
-        LinkedListTabulatedFunction linkFunction = new LinkedListTabulatedFunction(linkXValues, linkYValues);
+        TabulatedFunction linkFunction = new LinkedListTabulatedFunction(linkXValues, linkYValues);
         CompositeFunction compositeFunction = linkFunction.andThen(arrayFunction).andThen(squareFunction);
         Assert.assertEquals(compositeFunction.apply(3.5), 441.0);
         Assert.assertEquals(compositeFunction.apply(5), 900.0);
