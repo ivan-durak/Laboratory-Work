@@ -15,11 +15,14 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     public ArrayTabulateFunction(MathFunction source, double xFrom, double xTo, int count) {
-        double intervalSplittingStep = (xTo - xFrom) / count;
         double[] xValues = new double[count];
         double[] yValues = new double[count];
+        double intervalSplittingStep = (xTo - xFrom) / (count - 1);
         xValues[0] = xFrom;
         yValues[0] = source.apply(xFrom);
+        if (count == 1) {
+            return;
+        }
         xValues[count - 1] = xTo;
         yValues[count - 1] = source.apply(xTo);
         for (int element = 1; element < count - 1; element++) {

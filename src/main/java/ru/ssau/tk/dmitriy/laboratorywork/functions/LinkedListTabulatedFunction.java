@@ -13,6 +13,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        if (count == 1) {
+            addNode(xFrom, source.apply(xFrom));
+            return;
+        }
         head = null;
         double step = (xTo - xFrom) / (count - 1); //интервал дискретизации
         for (int i = 0; i < count; i++) {

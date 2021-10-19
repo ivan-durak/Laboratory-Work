@@ -20,14 +20,14 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testGetCount() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
-        Assert.assertEquals(arrayTabulateObjectTwo.getCount(), 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
+        Assert.assertEquals(arrayTabulateObjectTwo.getCount(), 101);
     }
 
     @Test
     public void testGetX() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.getX(element), element * (67.2 - 1.2) / 100.0 + 1.2, DELTA);
         }
@@ -36,7 +36,7 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testGetY() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.getY(element), sqObject.apply(arrayTabulateObjectTwo.getX(element)), DELTA);
         }
@@ -59,21 +59,21 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testLeftBound() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         Assert.assertEquals(arrayTabulateObjectTwo.leftBound(), 1.2, DELTA);
     }
 
     @Test
     public void testRightBound() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         Assert.assertEquals(arrayTabulateObjectTwo.rightBound(), 67.2, DELTA);
     }
 
     @Test
     public void testIndexOfX() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         Assert.assertEquals(arrayTabulateObjectTwo.indexOfX(1.1), -1, DELTA);
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.indexOfX(1.2 + element * 0.66), element);
@@ -83,7 +83,7 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testIndexOfY() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         Assert.assertEquals(arrayTabulateObjectTwo.indexOfY(0.432), -1, DELTA);
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.indexOfY(sqObject.apply(arrayTabulateObjectTwo.getX(element))), element);
@@ -93,19 +93,19 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testFloorIndexOfX() {
         SquareFunction sqObject = new SquareFunction();
-        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(1.2 + element * 0.66), element);
         }
         Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(1.1), 0);
         Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(4.6), 5);
-        Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(67.3), 100);
+        Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(67.3), 101);
     }
 
     @Test
     public void testExtrapolateLeft() {
         SquareFunction sqObject = new SquareFunction();
-        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
+        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateLeft(1.1), 1.1340000000000003, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateLeft(0.9), 0.5220000000000002, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateLeft(Double.NEGATIVE_INFINITY), Double.NEGATIVE_INFINITY);
@@ -114,9 +114,9 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testExtrapolateRight() {
         SquareFunction sqObject = new SquareFunction();
-        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 100);
-        Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(67.3), 4529.147999999999, DELTA);
-        Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(69), 4755.383999999999, DELTA);
+        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1, 15, 15);
+        Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(15.5), 239.5, DELTA);
+        Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(16), 254.0, DELTA);
         Assert.assertEquals(arrayTabulateObjectTwo.extrapolateRight(Double.POSITIVE_INFINITY), Double.POSITIVE_INFINITY);
     }
 
