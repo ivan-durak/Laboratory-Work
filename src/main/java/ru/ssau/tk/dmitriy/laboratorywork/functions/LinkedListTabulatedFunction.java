@@ -1,7 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 
-public class LinkedListTabulatedFunction {//TODO: когда абстрактный класс будет написан, добавить его в описание данного класса
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     private int count = 0;
     private Node head;
 
@@ -14,8 +14,8 @@ public class LinkedListTabulatedFunction {//TODO: когда абстрактн�
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         head = null;
-        double step = (xTo - xFrom) / (count - 1); //интервал дискретизации
-        for (int i = 0; i <= count - 1; i++) {
+        double step = (xTo - xFrom) / count; //интервал дискретизации
+        for (int i = 0; i <= count; i++) {
             double value = xFrom + step * i;       //передаваемое значение х, отсчет с xFrom
             addNode(value, source.apply(value));   //y-результат функции source
         }
@@ -126,7 +126,7 @@ public class LinkedListTabulatedFunction {//TODO: когда абстрактн�
     /**
      * взята реализация floorIndexOfX(),т.к. этот метод был написан раньше по схожему принципу
      * для повышения производительности
-     *
+     * <p>
      * тест для этого метода написан в тесте для метода floorIndexOfX(), там сравниваются индексы возращенных элементов
      */
     protected Node floorNodeOfX(double x) {
@@ -167,7 +167,6 @@ public class LinkedListTabulatedFunction {//TODO: когда абстрактн�
         if (count == 1) return head.x;
         return leftY + ((rightY - leftY) / (rightX - leftX)) * (x - leftX);
     }
-    //TODO: сделать 3* и тест для apply(), последнее после добавления абстрактного класса
 
     public double apply(double x) {
         if (x < head.x) return extrapolateLeft(x);//левая экстраполяция для х меньше самого левого

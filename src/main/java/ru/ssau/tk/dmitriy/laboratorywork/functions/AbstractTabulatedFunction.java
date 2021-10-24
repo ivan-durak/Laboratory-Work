@@ -1,13 +1,6 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
-    public abstract int getCount();
-
-    public abstract double getX(int index);
-
-    public abstract double getY(int index);
-
-    public abstract void setY(int index, double value);
 
     protected abstract int floorIndexOfX(double x);
 

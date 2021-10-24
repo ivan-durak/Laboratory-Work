@@ -24,4 +24,19 @@ public class CompositeFunctionTest {
         Assert.assertEquals(complexFunction.apply(Double.NEGATIVE_INFINITY), Double.POSITIVE_INFINITY, 0.00001);
         Assert.assertEquals(complexFunction.apply(Double.NaN), Double.NaN, 0.00001);
     }
+
+    @Test
+    public void testCompositeFunctionIncludingTabulatedFunctions() {
+        SquareFunction squareFunction = new SquareFunction();
+        double[] arrayXValues = {3, 4, 5, 6, 7, 8, 9},
+                arrayYValues = {-9, -12, -15, -18, -21, -24, -27};
+        TabulatedFunction arrayFunction = new ArrayTabulateFunction(arrayXValues, arrayYValues);
+        double[] linkXValues = {1, 2, 3, 4, 5, 6, 7},
+                linkYValues = {2, 4, 6, 8, 10, 12, 14};
+        TabulatedFunction linkFunction = new LinkedListTabulatedFunction(linkXValues, linkYValues);
+        CompositeFunction compositeFunction = linkFunction.andThen(arrayFunction).andThen(squareFunction);
+        Assert.assertEquals(compositeFunction.apply(3.5), 441.0);
+        Assert.assertEquals(compositeFunction.apply(5), 900.0);
+        Assert.assertEquals(compositeFunction.apply(0.1), 0.36, 0.00001);
+    }
 }
