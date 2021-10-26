@@ -101,9 +101,6 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
 
     @Override
     public int floorIndexOfX(double x) throws IllegalArgumentException{
-        if (x < leftBound()) {
-            throw new IllegalArgumentException("x is less than the left border");
-        }
         for (int element = 0; element < this.count; element++) {
             if (Math.abs(xValues[element] - x) < 0.0001) {
                 return element;
@@ -114,7 +111,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
                 return element - 1;
             }
             if (x < xValues[element]) {
-                return 0;
+                throw new IllegalArgumentException("x is less than the left border");
             }
         }
         return this.count;

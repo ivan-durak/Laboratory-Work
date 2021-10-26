@@ -147,9 +147,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     public int floorIndexOfX(double x) throws IllegalArgumentException {
-        if (x < leftBound()) {
-            throw new IllegalArgumentException("x is less than the left border");
-        }
         Node help = head;
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
         double difference = 0;
@@ -164,7 +161,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
         if (outPut == null) {
             if (difference < 0) {     //выполнение условия: если все х больше переданного, т.к. все х упорядочены
-                return 0;
+                throw new IllegalArgumentException("x is less than the left border");
             }
         } else if (difference > 0) { //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
             return count;
