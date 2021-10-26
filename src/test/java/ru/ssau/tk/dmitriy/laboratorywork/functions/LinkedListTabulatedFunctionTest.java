@@ -35,6 +35,7 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.getX(0), 2.0);
         Assert.assertEquals(link.getX(5), 7.0);
         Assert.assertEquals(link.getX(8), 10.0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> link.getX(-2));
     }
 
     @Test
@@ -44,6 +45,7 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.getY(0), 3.0);
         Assert.assertEquals(link.getY(5), 2.0);
         Assert.assertEquals(link.getY(8), 7.0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> link.getY(-1));
     }
 
     @Test
@@ -56,6 +58,7 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.getY(0), 45.0);
         Assert.assertEquals(link.getY(4), 6.0);
         Assert.assertEquals(link.getY(3), 10.0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> link.setY(-2,-10));
     }
 
     @Test
@@ -87,6 +90,7 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.floorIndexOfX(14.5), 4);
         Assert.assertEquals(link.floorIndexOfX(19.2), 9);
         Assert.assertEquals(link.floorIndexOfX(24.6), 14);
+        Assert.assertThrows(IllegalArgumentException.class, () -> link.floorIndexOfX(7));
     }
 
     @Test
@@ -97,9 +101,6 @@ public class LinkedListTabulatedFunctionTest {
         AbstractTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.extrapolateLeft(9), 79.0);
         Assert.assertEquals(link.extrapolateLeft(7.5), 47.5);
-        double[] xValues = {1}, yValues = {23};
-        AbstractTabulatedFunction linkedListTabulatedFunction = new LinkedListTabulatedFunction(xValues, yValues);
-        Assert.assertEquals(linkedListTabulatedFunction.extrapolateLeft(1), 1.0);
     }
 
     @Test
@@ -110,9 +111,6 @@ public class LinkedListTabulatedFunctionTest {
         AbstractTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.extrapolateRight(26), 674.0);
         Assert.assertEquals(link.extrapolateRight(28.2), 781.8);
-        double[] xValues = {5}, yValues = {23};
-        AbstractTabulatedFunction linkedListTabulatedFunction = new LinkedListTabulatedFunction(xValues, yValues);
-        Assert.assertEquals(linkedListTabulatedFunction.extrapolateRight(1), 5.0);
     }
 
     @Test
@@ -123,10 +121,6 @@ public class LinkedListTabulatedFunctionTest {
         AbstractTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.interpolate(14.5, link.floorIndexOfX(14.5)), 210.5);
         Assert.assertEquals(link.interpolate(22.3, link.floorIndexOfX(22.3)), 497.5, 0.00001);
-        double[] xValues = {5}, yValues = {23};
-        AbstractTabulatedFunction linkedListTabulatedFunction = new LinkedListTabulatedFunction(xValues, yValues);
-        Assert.assertEquals(linkedListTabulatedFunction.extrapolateRight(1), 5.0);
-        Assert.assertEquals(linkedListTabulatedFunction.interpolate(3, linkedListTabulatedFunction.floorIndexOfX(3)), 5.0);
     }
 
     @Test

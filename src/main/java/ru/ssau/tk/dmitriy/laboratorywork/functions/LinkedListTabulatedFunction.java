@@ -20,17 +20,22 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
     }
 
-    public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
+    public LinkedListTabulatedFunction(double[] xValues, double[] yValues) throws IllegalArgumentException {
+        if (xValues.length < 2 | yValues.length < 2) {
+            throw new IllegalArgumentException("the length of the table is less than the minimum");
+        }
         head = null;
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
         }
     }
 
-    public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
-        if (count == 1) {
-            addNode(xFrom, source.apply(xFrom));
-            return;
+    public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) throws IllegalArgumentException {
+        if (count < 2) {
+            throw new IllegalArgumentException("the length of the table is less than the minimum");
+        }
+        if (xFrom >= xTo) {
+            throw new IllegalArgumentException("incorrect end and start coordinates");
         }
         head = null;
         double step = (xTo - xFrom) / (count - 1); //интервал дискретизации
@@ -71,7 +76,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return head.prev.x;
     }
 
-    private Node getNode(int index) {
+    private Node getNode(int index) throws IllegalArgumentException {
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         if (index == 0) return head;
         Node desiredNode = null;
         Node help = head;
@@ -90,17 +98,26 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public double getX(int index) {
+    public double getX(int index) throws IllegalArgumentException {
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         return getNode(index).x;
     }
 
     @Override
-    public double getY(int index) {
+    public double getY(int index) throws IllegalArgumentException {
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         return getNode(index).y;
     }
 
     @Override
-    public void setY(int index, double value) {
+    public void setY(int index, double value) throws IllegalArgumentException {
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         getNode(index).y = value;
     }
 
@@ -129,7 +146,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public int floorIndexOfX(double x) {
+    public int floorIndexOfX(double x) throws IllegalArgumentException {
+        if (x < leftBound()) {
+            throw new IllegalArgumentException("x is less than the left border");
+        }
         Node help = head;
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
         double difference = 0;
@@ -152,7 +172,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return indexOfX(outPut.x);
     }
 
-    protected Node floorNodeOfX(double x) {
+    protected Node floorNodeOfX(double x) throws IllegalArgumentException {
+        if (x < leftBound()) {
+            throw new IllegalArgumentException("x is less than the left border");
+        }
         Node outPut = null;
         Node help = head;
         for (int i = 0; i < count; i++) {
@@ -168,9 +191,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected double extrapolateLeft(double x) {
-        if (count == 1) {
-            return head.x;
-        }
         Node firstHelpNode = head;       //начинаем с головы, поэтому метод получения узла не вызывается
         Node secondHelpNode = head.next;
         return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
@@ -178,9 +198,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected double extrapolateRight(double x) {
-        if (count == 1) {
-            return head.x;
-        }
         Node secondHelpNode = head.prev;
         Node firstHelpNode = secondHelpNode.prev;//поменяны индексы местами в соответствии с формулой
         return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
@@ -188,18 +205,12 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-        if (count == 1) {
-            return head.x;
-        }
         Node helpNode = getNode(floorIndex);  //(k-1)-ый индекс
         return super.interpolate(x, helpNode.x, helpNode.next.x, helpNode.y, helpNode.next.y);
     }
 
     @Override
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) { //для метода apply()
-        if (count == 1) {
-            return head.x;
-        }
         return super.interpolate(x, leftX, rightX, leftY, rightY);
     }
 
@@ -240,7 +251,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public void remove(int index) {
+    public void remove(int index) throws IllegalArgumentException {
+        //TODO:добавить тест на бросок исключения в тест для этого метода, когда он будет готов
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         Node temp = head;
         for (int i = 0; i < count; i++) {
             if (i == index) {
