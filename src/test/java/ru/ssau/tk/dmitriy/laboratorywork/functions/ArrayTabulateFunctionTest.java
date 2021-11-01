@@ -31,6 +31,7 @@ public class ArrayTabulateFunctionTest {
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.getX(element), element * (67.2 - 1.2) / 100.0 + 1.2, DELTA);
         }
+        Assert.assertThrows(IllegalArgumentException.class, () -> arrayTabulateObjectTwo.getX(-2));
     }
 
     @Test
@@ -40,6 +41,7 @@ public class ArrayTabulateFunctionTest {
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.getY(element), sqObject.apply(arrayTabulateObjectTwo.getX(element)), DELTA);
         }
+        Assert.assertThrows(IllegalArgumentException.class, () -> arrayTabulateObjectTwo.getY(-2));
     }
 
     @Test
@@ -54,6 +56,7 @@ public class ArrayTabulateFunctionTest {
         array.setY(3, 11);
         Assert.assertEquals(array.getY(1), 3.9);
         Assert.assertEquals(array.getY(3), 11.0);
+        Assert.assertThrows(IllegalArgumentException.class, () -> array.setY(-5, -200));
     }
 
     @Test
@@ -97,9 +100,9 @@ public class ArrayTabulateFunctionTest {
         for (int element = 0; element < 99; element++) {
             Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(1.2 + element * 0.66), element);
         }
-        Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(1.1), 0);
         Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(4.6), 5);
         Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(67.3), 101);
+        Assert.assertThrows(IllegalArgumentException.class, () -> arrayTabulateObjectTwo.floorIndexOfX(-2));
     }
 
     @Test
@@ -199,6 +202,7 @@ public class ArrayTabulateFunctionTest {
         for (int i = 0; i < newYValues.length; i++) {
             Assert.assertEquals(array.getY(i), newYValues[i]);
         }
+        Assert.assertThrows(IllegalArgumentException.class, () -> array.remove(-3));
     }
 
     @Test

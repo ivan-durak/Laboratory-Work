@@ -8,21 +8,27 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     private double[] yValues;
     private int count = 0;
 
-    public ArrayTabulateFunction(double[] xValues, double[] yValues) {
+    public ArrayTabulateFunction(double[] xValues, double[] yValues) throws IllegalArgumentException{
+        if (xValues.length < 2 | yValues.length < 2) {
+            throw new IllegalArgumentException("the length of the table is less than the minimum");
+        }
         count = xValues.length;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
     }
 
-    public ArrayTabulateFunction(MathFunction source, double xFrom, double xTo, int count) {
+    public ArrayTabulateFunction(MathFunction source, double xFrom, double xTo, int count)throws IllegalArgumentException {
+        if (count < 2) {
+            throw new IllegalArgumentException("the length of the table is less than the minimum");
+        }
+        if (xFrom >= xTo) {
+            throw new IllegalArgumentException("incorrect end and start coordinates");
+        }
         double[] xValues = new double[count];
         double[] yValues = new double[count];
         double intervalSplittingStep = (xTo - xFrom) / (count - 1);
         xValues[0] = xFrom;
         yValues[0] = source.apply(xFrom);
-        if (count == 1) {
-            return;
-        }
         xValues[count - 1] = xTo;
         yValues[count - 1] = source.apply(xTo);
         for (int element = 1; element < count - 1; element++) {
@@ -40,17 +46,26 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public double getX(int index) {
+    public double getX(int index)throws IllegalArgumentException {
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         return xValues[index];
     }
 
     @Override
-    public double getY(int index) {
+    public double getY(int index)throws IllegalArgumentException {
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         return yValues[index];
     }
 
     @Override
-    public void setY(int index, double value) {
+    public void setY(int index, double value) throws IllegalArgumentException{
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         yValues[index] = value;
     }
 
@@ -85,7 +100,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public int floorIndexOfX(double x) {
+    public int floorIndexOfX(double x) throws IllegalArgumentException{
         for (int element = 0; element < this.count; element++) {
             if (Math.abs(xValues[element] - x) < 0.0001) {
                 return element;
@@ -96,7 +111,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
                 return element - 1;
             }
             if (x < xValues[element]) {
-                return 0;
+                throw new IllegalArgumentException("x is less than the left border");
             }
         }
         return this.count;
@@ -104,25 +119,16 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
 
     @Override
     public double extrapolateLeft(double x) {
-        if (count == 1) {
-            return xValues[0];
-        }
         return super.interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     public double extrapolateRight(double x) {
-        if (count == 1) {
-            return xValues[0];
-        }
         return super.interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
 
     @Override
     public double interpolate(double x, int floorIndex) {
-        if (count == 1) {
-            return xValues[0];
-        }
         return super.interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
@@ -156,7 +162,10 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public void remove(int index) {
+    public void remove(int index) throws IllegalArgumentException{
+        if ((index < 0) | (index >= count)) {
+            throw new IllegalArgumentException("The invalid index");
+        }
         System.arraycopy(xValues, index + 1, xValues, index, (count - 1) - index);
         System.arraycopy(yValues, index + 1, yValues, index, (count - 1) - index);
         count--;

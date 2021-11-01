@@ -1,7 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private int count = 0;
     private Node head;
 
@@ -13,18 +13,20 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     }
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        if (count == 1) {
+            addNode(xFrom, source.apply(xFrom));
+            return;
+        }
         head = null;
-        double step = (xTo - xFrom) / count; //интервал дискретизации
-        for (int i = 0; i <= count; i++) {
+        double step = (xTo - xFrom) / (count - 1); //интервал дискретизации
+        for (int i = 0; i < count; i++) {
             double value = xFrom + step * i;       //передаваемое значение х, отсчет с xFrom
             addNode(value, source.apply(value));   //y-результат функции source
         }
     }
 
     private void addNode(double x, double y) {  //метод добавления точки в список
-        Node newNode = new Node();              //конструктор по умолчанию
-        newNode.x = x;
-        newNode.y = y;
+        Node newNode = new Node(x, y);              //конструктор по умолчанию
         if (head == null) {
             head = newNode;
             newNode.next = newNode; //голова списка должна ссылаться на саму себя
@@ -39,19 +41,22 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         count++; //увеличение числа точек в списке
     }
 
+    @Override
     public int getCount() {
         return count;
     }
 
+    @Override
     public double leftBound() {
         return head.x;
     }
 
+    @Override
     public double rightBound() {
         return head.prev.x;
     }
 
-    private Node getNode(int index) {    //метод поиска узла по индексу
+    private Node getNode(int index) {
         if (index == 0) return head;
         Node desiredNode = null;
         Node help = head;
@@ -69,110 +74,170 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         return desiredNode;
     }
 
+    @Override
     public double getX(int index) {
         return getNode(index).x;
     }
 
+    @Override
     public double getY(int index) {
         return getNode(index).y;
     }
 
+    @Override
     public void setY(int index, double value) {
         getNode(index).y = value;
     }
 
-    public int indexOfX(double x) { //можно переписать с getX(),
-        Node help = head;           //если скажут
+    @Override
+    public int indexOfX(double x) {
+        Node help = head;
         for (int i = 0; i <= count; i++) {
-            if (help.x == x) return i;
+            if (help.x == x) {
+                return i;
+            }
             help = help.next;
         }
         return -1;
     }
 
-    public int indexOfY(double y) {  //можно переписать с getY(), если
-        Node help = head;            //если скажут
-        for (int i = 0; i < count; i++) {//в цикле идем по списку в одну сторону, при совпадении значения у и аргумента
-            if (help.y == y) return i;   //мгновенный выход из метода
+    @Override
+    public int indexOfY(double y) {
+        Node help = head;
+        for (int i = 0; i < count; i++) {
+            if (help.y == y) {
+                return i;
+            }
             help = help.next;
         }
         return -1;
     }
 
-    /**
-     * из-за особенностей реализации здесь не может быть вызван floorNodeOfX(), т.к. в таком случае мы не сможем
-     * определить частные случаи возвращения 0 и count
-     */
+    @Override
     public int floorIndexOfX(double x) {
         Node help = head;
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
         double difference = 0;
-        for (int i = 0; i < count; i++) {  //проходимся в цикле по списку от начала и до конца
-            if (help.x == x)
-                return i; //взято из indexOfX, можно было вызывать сам этот метод, но зачем ради одной строки
-            if ((difference = x - help.x) > 0) {//здесь находится самый максимальный х в списке, который меньше переданного
-                outPut = help;                  //сохраняем ссылку на него
-            }                                   //если какой-то х совпадет, то это будет отловлено двумя строчками выше
+        for (int i = 0; i < count; i++) {
+            if (help.x == x) {
+                return i;
+            }
+            if ((difference = x - help.x) > 0) {
+                outPut = help;
+            }
             help = help.next;
         }
         if (outPut == null) {
-            if (difference < 0)     //выполнение условия: если все х больше переданного, т.к. все х упорядочены
+            if (difference < 0) {     //выполнение условия: если все х больше переданного, т.к. все х упорядочены
                 return 0;
-        } else if (difference > 0) //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
+            }
+        } else if (difference > 0) { //выполнение условия: если все х меньше переданного, т.к. все х упорядочены
             return count;
-        return indexOfX(outPut.x); //IDEA говорит, что outPut может сгенерировать NullPointerException, но по логике она никогда не будет пустой
+        }
+        return indexOfX(outPut.x);
     }
 
-    /**
-     * взята реализация floorIndexOfX(),т.к. этот метод был написан раньше по схожему принципу
-     * для повышения производительности
-     * <p>
-     * тест для этого метода написан в тесте для метода floorIndexOfX(), там сравниваются индексы возращенных элементов
-     */
     protected Node floorNodeOfX(double x) {
         Node outPut = null;
         Node help = head;
         for (int i = 0; i < count; i++) {
             if (x - help.x > 0) {
                 outPut = help;
-            } else break;
+            } else {
+                break;
+            }
             help = help.next;
         }
         return outPut;
     }
 
+    @Override
     protected double extrapolateLeft(double x) {
-        if (count == 1) return head.x;
+        if (count == 1) {
+            return head.x;
+        }
         Node firstHelpNode = head;       //начинаем с головы, поэтому метод получения узла не вызывается
         Node secondHelpNode = head.next;
-        return firstHelpNode.y + ((secondHelpNode.y - firstHelpNode.y) / (secondHelpNode.x - firstHelpNode.x))//
-                * (x - firstHelpNode.x);
+        return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
     }
 
+    @Override
     protected double extrapolateRight(double x) {
-        if (count == 1) return head.x;
-        Node secondHelpNode = head.prev;       //начинаем с головы, поэтому метод получения узла не вызывается
+        if (count == 1) {
+            return head.x;
+        }
+        Node secondHelpNode = head.prev;
         Node firstHelpNode = secondHelpNode.prev;//поменяны индексы местами в соответствии с формулой
-        return firstHelpNode.y + ((secondHelpNode.y - firstHelpNode.y) / (secondHelpNode.x - firstHelpNode.x))//
-                * (x - firstHelpNode.x);
+        return super.interpolate(x, firstHelpNode.x, secondHelpNode.x, firstHelpNode.y, secondHelpNode.y);
     }
 
+    @Override
     protected double interpolate(double x, int floorIndex) {
-        if (count == 1) return head.x;
+        if (count == 1) {
+            return head.x;
+        }
         Node helpNode = getNode(floorIndex);  //(k-1)-ый индекс
-        return helpNode.y + ((helpNode.next.y - helpNode.y) / (helpNode.next.x - helpNode.x)) * (x - helpNode.x);
+        return super.interpolate(x, helpNode.x, helpNode.next.x, helpNode.y, helpNode.next.y);
     }
 
+    @Override
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) { //для метода apply()
-        if (count == 1) return head.x;
-        return leftY + ((rightY - leftY) / (rightX - leftX)) * (x - leftX);
+        if (count == 1) {
+            return head.x;
+        }
+        return super.interpolate(x, leftX, rightX, leftY, rightY);
     }
 
+    @Override
     public double apply(double x) {
-        if (x < head.x) return extrapolateLeft(x);//левая экстраполяция для х меньше самого левого
-        if (x > head.prev.x) return extrapolateRight(x);//правая экстраполяция для х больше самого правого
-        Node desiredNode = floorNodeOfX(x);          //получаем нужный узел
+        if (x < head.x) {
+            return extrapolateLeft(x);
+        }
+        if (x > head.prev.x) {
+            return extrapolateRight(x);
+        }
+        int index;
+        if ((index = indexOfX(x)) != -1) { //если такой х есть в таблице
+            return getY(index);
+        }
+        Node desiredNode = floorNodeOfX(x);
         return interpolate(x, desiredNode.x, desiredNode.next.x, desiredNode.y, desiredNode.next.y);
+    }
+
+    @Override
+    public void insert(double x, double y) {
+        Node temp = head;
+        for (int i = 1; i < count; i++) {
+            if (temp.x == x) {
+                temp.y = y;
+                break;
+            } else if (temp.x > x) {
+                Node newNode = new Node(x, y);
+                newNode.next = temp;
+                newNode.prev = temp.prev;
+                temp.prev.next = newNode;
+                temp.prev = newNode;
+                count++;
+                break;
+            }
+            temp = temp.next;
+        }
+    }
+
+    @Override
+    public void remove(int index) {
+        Node temp = head;
+        for (int i = 0; i < count; i++) {
+            if (i == index) {
+                temp.prev.next = temp.next;
+                temp.next.prev = temp.prev;
+                temp.next = null;
+                temp.prev = null;
+                count--;
+                break;
+            }
+            temp = temp.next;
+        }
     }
 }
 
