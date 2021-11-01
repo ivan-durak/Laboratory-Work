@@ -1,4 +1,4 @@
-package Exceptions;
+package ru.ssau.tk.dmitriy.laboratorywork.exceptions;
 
 public class DifferentLengthOfArraysException extends RuntimeException {
 
