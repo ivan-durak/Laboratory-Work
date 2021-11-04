@@ -1,5 +1,6 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
+import java.util.Iterator;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
     private int count = 0;
@@ -169,7 +170,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return indexOfX(outPut.x);
     }
 
-    protected Node floorNodeOfX(double x) throws IllegalArgumentException{
+    protected Node floorNodeOfX(double x) throws IllegalArgumentException {
         if (x < leftBound()) {
             throw new IllegalArgumentException("x is less than the left border");
         }
@@ -265,6 +266,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             }
             temp = temp.next;
         }
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        throw new UnsupportedOperationException();
     }
 }
 
