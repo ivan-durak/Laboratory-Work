@@ -3,9 +3,10 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import java.util.Iterator;
 
 public class LinkedListTabulatedFunctionTest {
+    private final static double DELTA = 0.00001;
 
     @Test
     public void testGetCount() {
@@ -58,7 +59,7 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.getY(0), 45.0);
         Assert.assertEquals(link.getY(4), 6.0);
         Assert.assertEquals(link.getY(3), 10.0);
-        Assert.assertThrows(IllegalArgumentException.class, () -> link.setY(-2,-10));
+        Assert.assertThrows(IllegalArgumentException.class, () -> link.setY(-2, -10));
     }
 
     @Test
@@ -143,5 +144,25 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.apply(2), 0.1, 0.00001); //х меньше левой границы
         Assert.assertEquals(link.apply(8.5), 10.675); //х больше правой границы
         Assert.assertEquals(link.apply(6), 7.2); //х внутри некоторого интервала
+    }
+
+    @Test
+    public void testIterator() {
+        TabulatedFunction tabulatedFunction = new LinkedListTabulatedFunction(new double[]{1, 2, 3, 4, 5},//
+                new double[]{2, 4, 6, 8, 10});
+        Iterator<Point> iterator = tabulatedFunction.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            Assert.assertEquals(point.x, tabulatedFunction.getX(i), DELTA);
+            Assert.assertEquals(point.y, tabulatedFunction.getY(i), DELTA);
+            i++;
+        }
+        i = 0;
+        for (Point point : tabulatedFunction) {
+            Assert.assertEquals(point.x, tabulatedFunction.getX(i), DELTA);
+            Assert.assertEquals(point.y, tabulatedFunction.getY(i), DELTA);
+            i++;
+        }
     }
 }
