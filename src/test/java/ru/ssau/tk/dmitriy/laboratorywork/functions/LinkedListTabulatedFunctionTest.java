@@ -158,11 +158,13 @@ public class LinkedListTabulatedFunctionTest {
             Assert.assertEquals(point.y, tabulatedFunction.getY(i), DELTA);
             i++;
         }
+        Assert.assertEquals(i, 5);
         i = 0;
         for (Point point : tabulatedFunction) {
             Assert.assertEquals(point.x, tabulatedFunction.getX(i), DELTA);
             Assert.assertEquals(point.y, tabulatedFunction.getY(i), DELTA);
             i++;
         }
+        Assert.assertEquals(i, 5);
     }
 }
