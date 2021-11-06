@@ -1,4 +1,5 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
+import ru.ssau.tk.dmitriy.laboratorywork.exceptions.*;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
 
@@ -25,8 +26,22 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
         return indexOfX(x) == -1 ? interpolate(x, floorIndexOfX(x)) : getY(indexOfX(x));
 
     }
-}
 
+    protected static void checkLengthIsTheSame(double[] xValues, double[] yValues) {
+        if (xValues.length != yValues.length) {
+            throw new DifferentLengthOfArraysException();
+        }
+    }
+
+    protected static void checkSorted(double[] xValues) {
+        for (int element = 1; element < xValues.length; element++) {
+            if (xValues[element - 1] >= xValues[element]) {
+                throw new ArrayIsNotSortedException();
+            }
+        }
+
+    }
+}
 
 
 
