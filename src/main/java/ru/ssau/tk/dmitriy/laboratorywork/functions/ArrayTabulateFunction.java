@@ -2,6 +2,7 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayTabulateFunction extends AbstractTabulatedFunction implements Insertable, Removable {
 
@@ -174,7 +175,22 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
 
     @Override
     public Iterator<Point> iterator() {
-        throw new UnsupportedOperationException();
+        return new Iterator<>() {
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < count;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return new Point(xValues[index], yValues[index++]);
+            }
+        };
     }
 }
 

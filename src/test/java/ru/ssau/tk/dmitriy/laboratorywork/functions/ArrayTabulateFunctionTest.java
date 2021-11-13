@@ -3,11 +3,19 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 public class ArrayTabulateFunctionTest {
     private static final double DELTA = 0.0001;
+    private static final double STEP = (67.2 - 1.2) / 99.0;
+    private static final double[] xValues = new double[]{6.4, 5.4, 6, 4.3};
+    private static final double[] yValues = new double[]{-2.7, 1.4, 3, 5.1};
+    private static final SquareFunction SquareObject = new SquareFunction();
+    private static final ArrayTabulateFunction arrayTabulatedObject = new ArrayTabulateFunction(xValues, yValues);
+    private static final ArrayTabulateFunction arrayTabulatedObjectTwo = new ArrayTabulateFunction(SquareObject, 1.2, 67.2, 100);
+
 
     @Test
     public void testArrayTabulatedFunctionWithTwoParameters() {
@@ -214,5 +222,23 @@ public class ArrayTabulateFunctionTest {
         Assert.assertEquals(array.apply(1.8), 6.01111, DELTA); // х меньше левой границы
         Assert.assertEquals(array.apply(7.5), 2.05, DELTA); // х больше правой границы
         Assert.assertEquals(array.apply(5), 3.99166, DELTA); //х внутри некоторого интервала
+    }
+    @Test
+    public static void testIterator() {
+        Iterator<Point> iterator = arrayTabulatedObject.iterator();
+        int element = 0;
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            Assert.assertEquals(point.x, arrayTabulatedObject.getX(element), DELTA);
+            Assert.assertEquals(point.y, arrayTabulatedObject.getY(element++), DELTA);
+        }
+        Assert.assertThrows(NoSuchElementException.class, iterator::next);
+        Assert.assertEquals(element, arrayTabulatedObject.getCount());
+        element = 0;
+        for (Point point : arrayTabulatedObject) {
+            Assert.assertEquals(point.x, arrayTabulatedObject.getX(element), DELTA);
+            Assert.assertEquals(point.y, arrayTabulatedObject.getY(element++), DELTA);
+        }
+        Assert.assertEquals(element, arrayTabulatedObject.getCount());
     }
 }
