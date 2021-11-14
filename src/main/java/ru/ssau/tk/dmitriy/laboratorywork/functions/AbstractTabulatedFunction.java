@@ -1,5 +1,9 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
+
 import ru.ssau.tk.dmitriy.laboratorywork.exceptions.*;
+import ru.ssau.tk.dmitriy.laboratorywork.operations.TabulatedFunctionOperationService;
+
+import java.util.Iterator;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
 
@@ -40,6 +44,17 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
             }
         }
 
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        string.append(getClass().getSimpleName()).append(" ").append("size = ").append(getCount()).append("\n");
+        Point[] points = TabulatedFunctionOperationService.asPoints(this);
+        for (Point point : points) {
+            string.append("[").append(point.x).append("; ").append(point.y).append("]").append("\n");
+        }
+        return string.toString();
     }
 }
 

@@ -24,7 +24,7 @@ public class AbstractTabulatedFunctionTest {
         assertThrows(DifferentLengthOfArraysException.class, () -> AbstractTabulatedFunction.checkLengthIsTheSame(valuesX2, valuesY2));
         assertThrows(DifferentLengthOfArraysException.class, () -> AbstractTabulatedFunction.checkLengthIsTheSame(valuesX3, valuesY3));
         double[] valuesX = new double[]{-1, 5};
-        double[] valuesY = new double[]{9,2};
+        double[] valuesY = new double[]{9, 2};
         AbstractTabulatedFunction.checkLengthIsTheSame(valuesX, valuesY);
     }
 
@@ -45,6 +45,6 @@ public class AbstractTabulatedFunctionTest {
         assertEquals(new LinkedListTabulatedFunction(new double[]{-15, -3, -1, 0}, new double[]{-15, -3, -1, 0}).toString(),
                 "LinkedListTabulatedFunction size = 4\n[-15.0; -15.0]\n[-3.0; -3.0]\n[-1.0; -1.0]\n[0.0; 0.0]\n");
         assertEquals(new ArrayTabulateFunction(new double[]{-15, -3, -1, 0}, new double[]{-15, -3, -1, 0}).toString(),
-                "ArrayTabulatedFunction size = 4\n[-15.0; -15.0]\n[-3.0; -3.0]\n[-1.0; -1.0]\n[0.0; 0.0]\n");
+                "ArrayTabulateFunction size = 4\n[-15.0; -15.0]\n[-3.0; -3.0]\n[-1.0; -1.0]\n[0.0; 0.0]\n");
     }
 }
