@@ -69,5 +69,4 @@ public class TabulatedFunctionOperationService {
     public TabulatedFunction divide(TabulatedFunction firstFunction, TabulatedFunction secondFunction) {
         return doOperation(firstFunction, secondFunction, (first, second) -> first / second);
     }
-
 }

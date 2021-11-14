@@ -1,7 +1,5 @@
 package ru.ssau.tk.dmitriy.laboratorywork.operations;
 
-
-
 import ru.ssau.tk.dmitriy.laboratorywork.functions.*;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.*;
 

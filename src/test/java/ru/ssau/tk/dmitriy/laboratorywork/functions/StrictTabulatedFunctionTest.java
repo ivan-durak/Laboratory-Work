@@ -103,6 +103,22 @@ public class StrictTabulatedFunctionTest {
             Assert.assertEquals(point.y, wrapper.getY(i));
             i++;
         }
+        tabulatedFunction = new ArrayTabulateFunction(arrayOfX, arrayOfY);
+        wrapper = new StrictTabulatedFunction(tabulatedFunction);
+        iterator = wrapper.iterator();
+        i = 0;
+        for (Point point : wrapper) {
+            Assert.assertEquals(point.x, wrapper.getX(i));
+            Assert.assertEquals(point.y, wrapper.getY(i));
+            i++;
+        }
+        i = 0;
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            Assert.assertEquals(point.x, wrapper.getX(i));
+            Assert.assertEquals(point.y, wrapper.getY(i));
+            i++;
+        }
     }
 
     @Test
