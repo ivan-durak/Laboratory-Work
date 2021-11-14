@@ -1,11 +1,12 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ArrayTabulateFunction extends AbstractTabulatedFunction implements Insertable, Removable {
-
+public class ArrayTabulateFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+    private static final long serialVersionUID = 7927110438597458408L;
     private double[] xValues;
     private double[] yValues;
     private int count = 0;
