@@ -1,9 +1,11 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+    private static final long serialVersionUID = 1179374417522413670L;
     private int count = 0;
     private Node head;
 
