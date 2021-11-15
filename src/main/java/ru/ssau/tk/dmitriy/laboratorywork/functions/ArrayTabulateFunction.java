@@ -1,5 +1,9 @@
 package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -7,11 +11,14 @@ import java.util.NoSuchElementException;
 
 public class ArrayTabulateFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
     private static final long serialVersionUID = 7927110438597458408L;
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private double[] xValues;
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private double[] yValues;
     private int count = 0;
 
-    public ArrayTabulateFunction(double[] xValues, double[] yValues) throws IllegalArgumentException {
+    @JsonCreator
+    public ArrayTabulateFunction(@JsonProperty(value = "xValues") double[] xValues, @JsonProperty(value = "yValues") double[] yValues) throws IllegalArgumentException {
         if (xValues.length < 2 | yValues.length < 2) {
             throw new IllegalArgumentException("the length of the table is less than the minimum");
         }
@@ -20,7 +27,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
         this.yValues = Arrays.copyOf(yValues, count);
     }
 
-    public ArrayTabulateFunction(MathFunction source, double xFrom, double xTo, int count) throws IllegalArgumentException {
+    public ArrayTabulateFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (count < 2) {
             throw new IllegalArgumentException("the length of the table is less than the minimum");
         }
@@ -49,7 +56,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public double getX(int index) throws IllegalArgumentException {
+    public double getX(int index) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -57,7 +64,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public double getY(int index) throws IllegalArgumentException {
+    public double getY(int index) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -65,7 +72,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public void setY(int index, double value) throws IllegalArgumentException {
+    public void setY(int index, double value) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -103,7 +110,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public int floorIndexOfX(double x) throws IllegalArgumentException {
+    public int floorIndexOfX(double x) {
         for (int element = 0; element < this.count; element++) {
             if (Math.abs(xValues[element] - x) < 0.0001) {
                 return element;
@@ -165,7 +172,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     }
 
     @Override
-    public void remove(int index) throws IllegalArgumentException {
+    public void remove(int index) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }

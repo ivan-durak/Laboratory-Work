@@ -1,6 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.io;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.*;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.*;
 
@@ -71,5 +72,16 @@ public final class FunctionsIO {
 
     public static TabulatedFunction deserialize(BufferedInputStream stream) throws IOException, ClassNotFoundException {
         return (TabulatedFunction) new ObjectInputStream(stream).readObject();
+    }
+
+    public static void serializeJson(BufferedWriter writer, ArrayTabulateFunction function) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        writer.write(objectMapper.writeValueAsString(function));
+        writer.flush();
+    }
+
+    public static ArrayTabulateFunction deserializeJson(BufferedReader reader) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readerFor(ArrayTabulateFunction.class).readValue(reader);
     }
 }
