@@ -53,6 +53,21 @@ public class FunctionsIOTest {
         Assert.assertThrows(EOFException.class, () -> FunctionsIO.deserialize(bufferedInputStream));
     }
 
+    @Test
+    public void testSerializeDeserializeJson() throws IOException {
+        ArrayTabulateFunction arrayTabulateFunction = new ArrayTabulateFunction(new double[]{1, 2, 3, 4, 5}, new double[]{6, 12, 18, 24, 30});
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("temp/test serialize Json.Json"));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("temp/test serialize Json.Json"));
+        FunctionsIO.serializeJson(bufferedWriter, arrayTabulateFunction);
+        ArrayTabulateFunction deserializedArray = FunctionsIO.deserializeJson(bufferedReader);
+        int i = 0;
+        Assert.assertEquals(deserializedArray.getCount(), arrayTabulateFunction.getCount());
+        for (Point point : deserializedArray) {
+            Assert.assertEquals(point.x, arrayTabulateFunction.getX(i));
+            Assert.assertEquals(point.y, arrayTabulateFunction.getY(i++));
+        }
+    }
+
     @AfterClass
     public void deleteAllFilesFolder() {
         File[] files = new File("temp").listFiles();
@@ -63,7 +78,5 @@ public class FunctionsIOTest {
                 }
             }
         }
-
     }
-
 }
