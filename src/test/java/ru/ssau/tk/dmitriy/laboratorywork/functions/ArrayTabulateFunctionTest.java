@@ -10,11 +10,9 @@ import java.util.NoSuchElementException;
 public class ArrayTabulateFunctionTest {
     private static final double DELTA = 0.0001;
     private static final double STEP = (67.2 - 1.2) / 99.0;
-    private static final double[] xValues = new double[]{6.4, 5.4, 6, 4.3};
+    private static final double[] xValues = new double[]{4.3, 5.4, 6, 6.4};
     private static final double[] yValues = new double[]{-2.7, 1.4, 3, 5.1};
-    private static final SquareFunction SquareObject = new SquareFunction();
     private static final ArrayTabulateFunction arrayTabulatedObject = new ArrayTabulateFunction(xValues, yValues);
-    private static final ArrayTabulateFunction arrayTabulatedObjectTwo = new ArrayTabulateFunction(SquareObject, 1.2, 67.2, 100);
 
 
     @Test
@@ -23,6 +21,7 @@ public class ArrayTabulateFunctionTest {
         double[] yValues = new double[]{-2.4, 1.2, 3, 5.1};
         TabulatedFunction arrayTabulateObject = new ArrayTabulateFunction(xValues, yValues);
         Assert.assertEquals(arrayTabulateObject.getCount(), 4);
+        Assert.assertThrows(IllegalArgumentException.class, () -> new ArrayTabulateFunction(new double[]{1}, new double[]{3}));
     }
 
     @Test
@@ -84,10 +83,10 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testIndexOfX() {
         SquareFunction sqObject = new SquareFunction();
-        TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
-        Assert.assertEquals(arrayTabulateObjectTwo.indexOfX(1.1), -1, DELTA);
-        for (int element = 0; element < 99; element++) {
-            Assert.assertEquals(arrayTabulateObjectTwo.indexOfX(1.2 + element * 0.66), element);
+        TabulatedFunction arrayTabulateObjectThree = new ArrayTabulateFunction(sqObject, 1, 11, 11);
+        Assert.assertEquals(arrayTabulateObjectThree.indexOfX(-11), -1, DELTA);
+        for (int element = 0; element < arrayTabulateObjectThree.getCount(); element++) {
+            Assert.assertEquals(arrayTabulateObjectThree.indexOfX(1 + element), element);
         }
     }
 
@@ -104,13 +103,13 @@ public class ArrayTabulateFunctionTest {
     @Test
     public void testFloorIndexOfX() {
         SquareFunction sqObject = new SquareFunction();
-        AbstractTabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
-        for (int element = 0; element < 99; element++) {
-            Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(1.2 + element * 0.66), element);
+        AbstractTabulatedFunction arrayTabulateObjectThree = new ArrayTabulateFunction(sqObject, 1, 11, 11);
+        for (int element = 0; element < arrayTabulateObjectThree.getCount(); element++) {
+            Assert.assertEquals(arrayTabulateObjectThree.floorIndexOfX(1 + element), element);
         }
-        Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(4.6), 5);
-        Assert.assertEquals(arrayTabulateObjectTwo.floorIndexOfX(67.3), 101);
-        Assert.assertThrows(IllegalArgumentException.class, () -> arrayTabulateObjectTwo.floorIndexOfX(-2));
+        Assert.assertEquals(arrayTabulateObjectThree.floorIndexOfX(4.6), 3);
+        Assert.assertEquals(arrayTabulateObjectThree.floorIndexOfX(10.2), 9);
+        Assert.assertThrows(IllegalArgumentException.class, () -> arrayTabulateObjectThree.floorIndexOfX(-2));
     }
 
     @Test
@@ -223,6 +222,7 @@ public class ArrayTabulateFunctionTest {
         Assert.assertEquals(array.apply(7.5), 2.05, DELTA); // х больше правой границы
         Assert.assertEquals(array.apply(5), 3.99166, DELTA); //х внутри некоторого интервала
     }
+
     @Test
     public static void testIterator() {
         Iterator<Point> iterator = arrayTabulatedObject.iterator();

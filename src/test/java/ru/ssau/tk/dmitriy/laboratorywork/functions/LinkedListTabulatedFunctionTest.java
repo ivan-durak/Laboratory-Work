@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedListTabulatedFunctionTest {
     private final static double DELTA = 0.00001;
@@ -158,6 +159,7 @@ public class LinkedListTabulatedFunctionTest {
             Assert.assertEquals(point.y, tabulatedFunction.getY(i), DELTA);
             i++;
         }
+        Assert.assertThrows(NoSuchElementException.class, iterator::next);
         Assert.assertEquals(i, 5);
         i = 0;
         for (Point point : tabulatedFunction) {

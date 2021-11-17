@@ -29,6 +29,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (xValues.length < 2 | yValues.length < 2) {
             throw new IllegalArgumentException("the length of the table is less than the minimum");
         }
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        AbstractTabulatedFunction.checkSorted(xValues);
         head = null;
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
@@ -81,7 +83,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return head.prev.x;
     }
 
-    private Node getNode(int index) throws IllegalArgumentException {
+    private Node getNode(int index) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -103,7 +105,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public double getX(int index) throws IllegalArgumentException {
+    public double getX(int index) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -111,7 +113,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public double getY(int index) throws IllegalArgumentException {
+    public double getY(int index) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -119,7 +121,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public void setY(int index, double value) throws IllegalArgumentException {
+    public void setY(int index, double value) {
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");
         }
@@ -151,7 +153,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public int floorIndexOfX(double x) throws IllegalArgumentException {
+    public int floorIndexOfX(double x) {
         Node help = head;
         Node outPut = null; //ссылка, предназначенная для выбрасывания наружу
         double difference = 0;
@@ -174,7 +176,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return indexOfX(outPut.x);
     }
 
-    protected Node floorNodeOfX(double x) throws IllegalArgumentException {
+    protected Node floorNodeOfX(double x) {
         if (x < leftBound()) {
             throw new IllegalArgumentException("x is less than the left border");
         }
@@ -253,7 +255,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     @Override
-    public void remove(int index) throws IllegalArgumentException {
+    public void remove(int index) {
         //TODO:добавить тест на бросок исключения в тест для этого метода, когда он будет готов
         if ((index < 0) | (index >= count)) {
             throw new IllegalArgumentException("The invalid index");

@@ -3,8 +3,6 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 import ru.ssau.tk.dmitriy.laboratorywork.exceptions.*;
 import ru.ssau.tk.dmitriy.laboratorywork.operations.TabulatedFunctionOperationService;
 
-import java.util.Iterator;
-
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
 
     protected abstract int floorIndexOfX(double x);
@@ -17,7 +15,6 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
 
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) {
         return leftY + (x - leftX) * (rightY - leftY) / (rightX - leftX);
-
     }
 
     @Override
@@ -28,7 +25,6 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
             return extrapolateRight(x);
         }
         return indexOfX(x) == -1 ? interpolate(x, floorIndexOfX(x)) : getY(indexOfX(x));
-
     }
 
     protected static void checkLengthIsTheSame(double[] xValues, double[] yValues) {
@@ -43,7 +39,6 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
                 throw new ArrayIsNotSortedException();
             }
         }
-
     }
 
     @Override

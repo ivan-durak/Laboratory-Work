@@ -1,6 +1,10 @@
 package ru.ssau.tk.dmitriy.laboratorywork.exceptions;
 
-public class DifferentLengthOfArraysException extends RuntimeException {
+import java.io.Serializable;
+
+public class DifferentLengthOfArraysException extends RuntimeException implements Serializable {
+
+    private static final long serialVersionUID = 5598348619042613728L;
 
     public DifferentLengthOfArraysException() {
     }

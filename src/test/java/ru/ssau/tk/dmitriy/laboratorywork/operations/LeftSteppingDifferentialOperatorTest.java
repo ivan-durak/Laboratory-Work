@@ -8,7 +8,7 @@ public class LeftSteppingDifferentialOperatorTest {
     @Test
     public static void testDerive() {
         LeftSteppingDifferentialOperator leftSteppingDifferentialOperator = new LeftSteppingDifferentialOperator(5);
-        Assert.assertEquals(leftSteppingDifferentialOperator.derive(new SquareFunction()).apply(9),0.2);
+        Assert.assertEquals(leftSteppingDifferentialOperator.derive(new SquareFunction()).apply(9),13.0);
         Assert.assertThrows(IllegalArgumentException.class, () -> leftSteppingDifferentialOperator.setStep(-5.0));
         Assert.assertThrows(IllegalArgumentException.class, () -> new LeftSteppingDifferentialOperator(Double.NaN));
     }

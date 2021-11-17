@@ -18,10 +18,12 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     private int count = 0;
 
     @JsonCreator
-    public ArrayTabulateFunction(@JsonProperty(value = "xValues") double[] xValues, @JsonProperty(value = "yValues") double[] yValues) throws IllegalArgumentException {
+    public ArrayTabulateFunction(@JsonProperty(value = "xValues") double[] xValues, @JsonProperty(value = "yValues") double[] yValues) {
         if (xValues.length < 2 | yValues.length < 2) {
             throw new IllegalArgumentException("the length of the table is less than the minimum");
         }
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        AbstractTabulatedFunction.checkSorted(xValues);
         count = xValues.length;
         this.xValues = Arrays.copyOf(xValues, count);
         this.yValues = Arrays.copyOf(yValues, count);
@@ -92,7 +94,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     @Override
     public int indexOfX(double x) {
         for (int element = 0; element < this.count; element++) {
-            if (Math.abs(xValues[element] - x) < 0.0001) {
+            if (xValues[element] == x) {
                 return element;
             }
         }
@@ -102,7 +104,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     @Override
     public int indexOfY(double y) {
         for (int element = 0; element < this.count; element++) {
-            if (Math.abs(yValues[element] - y) < 0.0001) {
+            if (yValues[element] == y) {
                 return element;
             }
         }
@@ -112,7 +114,7 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
     @Override
     public int floorIndexOfX(double x) {
         for (int element = 0; element < this.count; element++) {
-            if (Math.abs(xValues[element] - x) < 0.0001) {
+            if (xValues[element] == x) {
                 return element;
             }
         }

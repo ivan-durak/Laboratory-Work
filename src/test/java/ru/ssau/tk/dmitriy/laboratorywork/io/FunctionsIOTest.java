@@ -27,7 +27,7 @@ public class FunctionsIOTest {
 
     @Test
     public void testByteStreams() throws IOException {
-        TabulatedFunction tabulatedFunction = new ArrayTabulateFunction(new double[]{2, 3, 5, 7, 9}, new double[]{5, 8, 17, 21, 15, 34});
+        TabulatedFunction tabulatedFunction = new ArrayTabulateFunction(new double[]{2, 3, 5, 7, 9}, new double[]{5, 8, 17, 21, 15});
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("temp/test byte streams.bin"));
         FunctionsIO.writeTabulatedFunction(bufferedOutputStream, tabulatedFunction);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream("temp/test byte streams.bin"));
