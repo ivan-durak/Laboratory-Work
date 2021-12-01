@@ -2,6 +2,7 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import ru.ssau.tk.dmitriy.laboratorywork.exceptions.InterpolationException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -123,6 +124,7 @@ public class LinkedListTabulatedFunctionTest {
         AbstractTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.interpolate(14.5, link.floorIndexOfX(14.5)), 210.5);
         Assert.assertEquals(link.interpolate(22.3, link.floorIndexOfX(22.3)), 497.5, 0.00001);
+        Assert.assertThrows(InterpolationException.class, () -> link.interpolate(15.1,3));
     }
 
     @Test
