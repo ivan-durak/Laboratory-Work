@@ -29,6 +29,8 @@ public class ArrayTabulateFunctionTest {
         SquareFunction sqObject = new SquareFunction();
         TabulatedFunction arrayTabulateObjectTwo = new ArrayTabulateFunction(sqObject, 1.2, 67.2, 101);
         Assert.assertEquals(arrayTabulateObjectTwo.getCount(), 101);
+        Assert.assertThrows(IllegalArgumentException.class, () -> new ArrayTabulateFunction(sqObject, 2, 1, 10));
+        Assert.assertThrows(IllegalArgumentException.class, () -> new ArrayTabulateFunction(sqObject, 3, 5, 1));
     }
 
     @Test

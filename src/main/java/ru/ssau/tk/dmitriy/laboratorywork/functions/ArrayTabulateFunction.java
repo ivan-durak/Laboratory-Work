@@ -3,6 +3,7 @@ package ru.ssau.tk.dmitriy.laboratorywork.functions;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.ssau.tk.dmitriy.laboratorywork.exceptions.InterpolationException;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -141,6 +142,9 @@ public class ArrayTabulateFunction extends AbstractTabulatedFunction implements 
 
     @Override
     public double interpolate(double x, int floorIndex) {
+        if ((x < getX(floorIndex)) | (x > getX(floorIndex + 1))){
+            throw new InterpolationException();
+        }
         return super.interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
