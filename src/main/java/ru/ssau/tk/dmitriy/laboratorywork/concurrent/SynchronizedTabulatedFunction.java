@@ -8,13 +8,16 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.Objects;
 
 public class SynchronizedTabulatedFunction implements TabulatedFunction {
     private TabulatedFunction tabulatedFunction;
     private Lock lock = new ReentrantLock(true);
+    private final Object object;
 
-    public SynchronizedTabulatedFunction(TabulatedFunction tabulatedFunction) {
+    public SynchronizedTabulatedFunction(TabulatedFunction tabulatedFunction, Object object) {
         this.tabulatedFunction = tabulatedFunction;
+        this.object = Objects.requireNonNull(object, "object must not be null");
     }
 
     @Override
@@ -148,5 +151,15 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
             lock.unlock();
         }
         return value;
+    }
+    public interface Operation<T> {
+        T apply(SynchronizedTabulatedFunction synchronizedTabulatedFunction);
+    }
+
+
+    public <T> T doSynchronously(Operation<? extends T> operation) {
+        synchronized (object) {
+            return operation.apply(this);
+        }
     }
 }
