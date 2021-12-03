@@ -19,6 +19,16 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
         this.tabulatedFunction = tabulatedFunction;
         this.object = Objects.requireNonNull(object, "object must not be null");
     }
+    public interface Operation<T> {
+        T apply(SynchronizedTabulatedFunction synchronizedTabulatedFunction);
+    }
+
+
+    public <T> T doSynchronously(Operation<? extends T> operation) {
+        synchronized (object) {
+            return operation.apply(this);
+        }
+    }
 
     @Override
     public int getCount() {
@@ -152,14 +162,5 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
         }
         return value;
     }
-    public interface Operation<T> {
-        T apply(SynchronizedTabulatedFunction synchronizedTabulatedFunction);
-    }
 
-
-    public <T> T doSynchronously(Operation<? extends T> operation) {
-        synchronized (object) {
-            return operation.apply(this);
-        }
-    }
 }
