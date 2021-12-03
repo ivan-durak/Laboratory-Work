@@ -1,17 +1,23 @@
 package ru.ssau.tk.dmitriy.laboratorywork.concurrent;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.ConstantFunction;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.LinkedListTabulatedFunction;
-public class AddingMultiplyingTaskExecutor{
+import ru.ssau.tk.dmitriy.laboratorywork.functions.TabulatedFunction;
+
+import java.util.concurrent.CountDownLatch;
+
+public class AddingMultiplyingTaskExecutor {
     public static void main(String[] args) throws InterruptedException {
-        LinkedListTabulatedFunction linkedListTabulatedFunction = new LinkedListTabulatedFunction(new ConstantFunction(2),1,100,100);
-        Thread thread1 = new Thread(new MultiplyingTask(linkedListTabulatedFunction));
-        Thread thread2 = new Thread(new MultiplyingTask(linkedListTabulatedFunction));
-        Thread thread3 = new Thread(new AddingTask(linkedListTabulatedFunction));
+        TabulatedFunction tabulatedFunction = new LinkedListTabulatedFunction(new ConstantFunction(2), 1, 100, 100);
+        CountDownLatch countDownLatch = new CountDownLatch(3);
+        Thread thread1 = new Thread(new MultiplyingTask(tabulatedFunction, countDownLatch::countDown));
+        Thread thread2 = new Thread(new MultiplyingTask(tabulatedFunction, countDownLatch::countDown));
+        Thread thread3 = new Thread(new AddingTask(tabulatedFunction, countDownLatch::countDown));
 
         thread1.start();
         thread2.start();
         thread3.start();
-        Thread.sleep(3000);
-        System.out.println(linkedListTabulatedFunction.toString());
+        countDownLatch.await();
+
+        System.out.println(tabulatedFunction.toString());
     }
 }
