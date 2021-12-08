@@ -1,6 +1,5 @@
 package ru.ssau.tk.dmitriy.laboratorywork.io;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.*;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.*;
