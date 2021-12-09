@@ -124,7 +124,7 @@ public class LinkedListTabulatedFunctionTest {
         AbstractTabulatedFunction link = new LinkedListTabulatedFunction(compositeFunction, 10, 25, 16);
         Assert.assertEquals(link.interpolate(14.5, link.floorIndexOfX(14.5)), 210.5);
         Assert.assertEquals(link.interpolate(22.3, link.floorIndexOfX(22.3)), 497.5, 0.00001);
-        Assert.assertThrows(InterpolationException.class, () -> link.interpolate(15.1,3));
+        Assert.assertThrows(InterpolationException.class, () -> link.interpolate(15.1, 3));
     }
 
     @Test
@@ -147,6 +147,43 @@ public class LinkedListTabulatedFunctionTest {
         Assert.assertEquals(link.apply(2), 0.1, 0.00001); //х меньше левой границы
         Assert.assertEquals(link.apply(8.5), 10.675); //х больше правой границы
         Assert.assertEquals(link.apply(6), 7.2); //х внутри некоторого интервала
+    }
+
+    @Test
+    public void testInsert() {
+        double[] xValues = {2.3, 3.1, 4.6, 5.3, 6.7, 7.2, 8.0}, yValues = {1.0, 3.4, 5.2, 6.9, 7.5, 8.4, 9.8};
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(xValues, yValues);
+        Assert.assertEquals(link.getCount(), 7);
+        link.insert(2.3, 9);
+        link.insert(3.1, 10);
+        Assert.assertEquals(link.getY(0), 9.0);
+        Assert.assertEquals(link.getY(1), 10.0);
+        Assert.assertEquals(link.getCount(), 7);
+        Assert.assertEquals(link.getY(2), 5.2);
+        link.insert(4, 4.5);
+        Assert.assertEquals(link.getCount(), 8);
+        Assert.assertEquals(link.getY(2), 4.5);
+        link.insert(9, 1);
+        Assert.assertEquals(link.getCount(), 9);
+        Assert.assertEquals(link.rightBound(), 9.0);
+        Assert.assertEquals(link.getY(link.getCount() - 1), 1.0);
+        link.insert(2, 11);
+        Assert.assertEquals(link.getCount(), 10);
+        Assert.assertEquals(link.getX(0), 2.0);
+        Assert.assertEquals(link.getY(0), 11.0);
+    }
+
+    @Test
+    public void testRemove() {
+        double[] xValues = {1, 2, 3, 4, 5, 6}, yValues = {2, 4, 6, 8, 10, 12};
+        LinkedListTabulatedFunction link = new LinkedListTabulatedFunction(xValues, yValues);
+        Assert.assertEquals(link.getCount(), 6);
+        Assert.assertEquals(link.getX(3), 4.0);
+        Assert.assertEquals(link.getY(3), 8.0);
+        link.remove(3);
+        Assert.assertEquals(link.getCount(), 5);
+        Assert.assertEquals(link.getX(3), 5.0);
+        Assert.assertEquals(link.getY(3), 10.0);
     }
 
     @Test

@@ -211,7 +211,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-        if ((x < getX(floorIndex)) | (x > getX(floorIndex + 1))){
+        if ((x < getX(floorIndex)) | (x > getX(floorIndex + 1))) {
             throw new InterpolationException();
         }
         Node helpNode = getNode(floorIndex);  //(k-1)-ый индекс
@@ -241,42 +241,58 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     public void insert(double x, double y) {
-        Node temp = head;
-        for (int i = 1; i < count; i++) {
-            if (temp.x == x) {
-                temp.y = y;
-                break;
-            } else if (temp.x > x) {
-                Node newNode = new Node(x, y);
-                newNode.next = temp;
-                newNode.prev = temp.prev;
-                temp.prev.next = newNode;
-                temp.prev = newNode;
-                count++;
+        if (count == 0) {
+            addNode(x, y);
+        } else {
+            int index;
+            if ((index = indexOfX(x)) != -1) {
+                setY(index, y);
+                return;
+            }
+            Node temp = head;
+            while (true) {
+                if (x > temp.x) {
+                    if (index < count - 1) {//из-за бесконечного цикла для x>rightBound() будет работать вечно
+                        temp = temp.next;
+                        index++;
+                        continue;
+                    }//поэтому выходим, как только заново пошли по списку
+                }
+                if (index == (count - 1)) {
+                    addNode(x, y);
+                } else if (index == -1) {
+                    Node newNode = new Node(x, y);
+                    head.next.prev = head;
+                    head.prev.next = newNode;
+                    newNode.prev = head.prev;
+                    newNode.next = head;
+                    head = newNode;
+                    count++;
+                } else {
+                    Node newNode = new Node(x, y);
+                    temp.prev.next = newNode;
+                    temp.prev = newNode;
+                    newNode.prev = temp.prev;
+                    newNode.next = temp;
+                    count++;
+                }
                 break;
             }
-            temp = temp.next;
         }
     }
 
     @Override
     public void remove(int index) {
-        //TODO:добавить тест на бросок исключения в тест для этого метода, когда он будет готов
-        if ((index < 0) | (index >= count)) {
+        if ((index < 0) | (index > count)) {
             throw new IllegalArgumentException("The invalid index");
         }
-        Node temp = head;
-        for (int i = 0; i < count; i++) {
-            if (i == index) {
-                temp.prev.next = temp.next;
-                temp.next.prev = temp.prev;
-                temp.next = null;
-                temp.prev = null;
-                count--;
-                break;
-            }
-            temp = temp.next;
+        Node delete = getNode(index);
+        delete.prev.next = delete.next;
+        delete.next.prev = delete.prev;
+        if (index == 0) {
+            head = delete.next;
         }
+        count--;
     }
 
     @Override
