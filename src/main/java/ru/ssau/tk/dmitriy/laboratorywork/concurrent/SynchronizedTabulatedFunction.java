@@ -23,9 +23,13 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
 
     public <T> T doSynchronously(Operation<? extends T> operation) {
         lock.lock();
-        T result = operation.apply(this);
-        lock.unlock();
+        T result;
+        try {
+            result = operation.apply(this);
+        }
+        finally {lock.unlock();}
         return result;
+
     }
 
     @Override
