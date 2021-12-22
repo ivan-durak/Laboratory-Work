@@ -26,8 +26,9 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
         T result;
         try {
             result = operation.apply(this);
+        } finally {
+            lock.unlock();
         }
-        finally {lock.unlock();}
         return result;
 
     }
