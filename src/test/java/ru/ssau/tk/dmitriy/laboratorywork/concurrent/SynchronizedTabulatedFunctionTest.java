@@ -3,12 +3,26 @@ package ru.ssau.tk.dmitriy.laboratorywork.concurrent;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.*;
+import ru.ssau.tk.dmitriy.laboratorywork.functions.ArrayTabulateFunction;
+import ru.ssau.tk.dmitriy.laboratorywork.functions.LinkedListTabulatedFunction;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class SynchronizedTabulatedFunctionTest {
-    private static final double DELTA = 0.00001;
+    private final double[] xValues = new double[]{1, 2, 3, 4, 5, 6, 7};
+    private final double[] yValues = new double[]{11, 21, 31, 41, 51, 61, 71};
+
+    private final double DELTA = 0.00001;
+
+    private SynchronizedTabulatedFunction getSynchronizedList() {
+        return new SynchronizedTabulatedFunction(new LinkedListTabulatedFunction(xValues, yValues));
+    }
+
+    private SynchronizedTabulatedFunction getSynchronizedArray() {
+        return new SynchronizedTabulatedFunction(new ArrayTabulateFunction(xValues, yValues));
+    }
+
 
     @Test
     public void testGetCount() {
@@ -111,4 +125,10 @@ public class SynchronizedTabulatedFunctionTest {
         Assert.assertEquals(synchronizedTabulatedFunction.apply(5), 25.0);
         Assert.assertEquals(synchronizedTabulatedFunction.apply(6.5), 42.5);
     }
+ @Test
+public void testDoSynchronously() {
+    SynchronizedTabulatedFunction synchronizedTabulatedFunction = getSynchronizedList();
+    Assert.assertEquals((int) synchronizedTabulatedFunction.doSynchronously(SynchronizedTabulatedFunction::getCount), 7);
+     Assert.assertEquals((double) synchronizedTabulatedFunction.doSynchronously(SynchronizedTabulatedFunction::rightBound), 7.0);
+}
 }
