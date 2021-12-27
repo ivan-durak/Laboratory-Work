@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class BasicMathFunctionWindow extends JDialog {
     private final TabulatedFunctionFactory factory;
@@ -26,14 +27,14 @@ public class BasicMathFunctionWindow extends JDialog {
 
     private final JButton createButton = new JButton("Создать");
 
-    public BasicMathFunctionWindow(TabulatedFunctionFactory factory) {
+    public BasicMathFunctionWindow(TabulatedFunctionFactory factory, Consumer<? super TabulatedFunction> callback) {
         super();
         setTitle("Создание функции из ранее написанных");
         this.factory = factory;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
         fillComboBox();
-        addButtonListener();
+        addButtonListener(callback);
         compose();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -45,16 +46,14 @@ public class BasicMathFunctionWindow extends JDialog {
         container.setLayout(layoutManager);
         layoutManager.setAutoCreateGaps(true);
         layoutManager.setAutoCreateContainerGaps(true);
-        setSize(450, 180);
+        setSize(500, 150);
         layoutManager.setHorizontalGroup(
                 layoutManager.createSequentialGroup()
-                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.CENTER)
                                 .addComponent(chooseFunctionLabel)
-                                .addGap(10)
                                 .addComponent(functionsComboBox))
-                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.CENTER)
                                 .addComponent(fromLabel)
-                                .addGap(10)
                                 .addComponent(fromField))
                         .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(toLabel)
@@ -64,7 +63,7 @@ public class BasicMathFunctionWindow extends JDialog {
                                 .addComponent(countOfPointsField))
                         .addComponent(createButton));
         layoutManager.setVerticalGroup(
-                layoutManager.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                layoutManager.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(layoutManager.createSequentialGroup()
                                 .addComponent(chooseFunctionLabel)
                                 .addComponent(functionsComboBox))
@@ -109,7 +108,7 @@ public class BasicMathFunctionWindow extends JDialog {
         return Double.parseDouble(constant);
     }
 
-    private void addButtonListener() {
+    private void addButtonListener(Consumer<? super TabulatedFunction> callback) {
         createButton.addActionListener(event -> {
             try {
                 if ("Тождественная функция" == functionsComboBox.getSelectedItem()) {
@@ -119,15 +118,11 @@ public class BasicMathFunctionWindow extends JDialog {
                 double xFrom = Double.parseDouble(fromField.getText());
                 double xTo = Double.parseDouble(toField.getText());
                 int count = Integer.parseInt(countOfPointsField.getText());
-                //TODO: должно как-то передаваться в вызывающее окно
-                System.out.println(factory.create(mathFunction, xFrom, xTo, count));
+                callback.accept(factory.create(mathFunction, xFrom, xTo, count));
+                dispose();
             } catch (Exception exception) {
                 new ExceptionWindow(this, exception);
             }
         });
-    }
-
-    public static void main(String[] args) {
-        BasicMathFunctionWindow functionWindow = new BasicMathFunctionWindow(new ArrayTabulatedFunctionFactory());
     }
 }
