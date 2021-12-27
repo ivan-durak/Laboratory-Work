@@ -111,8 +111,8 @@ public class BasicMathFunctionWindow extends JDialog {
     private void addButtonListener(Consumer<? super TabulatedFunction> callback) {
         createButton.addActionListener(event -> {
             try {
-                if ("Тождественная функция" == functionsComboBox.getSelectedItem()) {
-                    functionsMap.put("Тождественная функция", new ConstantFunction(getUserConstant()));
+                if ("Константная функция" == functionsComboBox.getSelectedItem()) {
+                    functionsMap.put("Константная функция", new ConstantFunction(getUserConstant()));
                 }
                 MathFunction mathFunction = functionsMap.get(functionsComboBox.getSelectedItem());
                 double xFrom = Double.parseDouble(fromField.getText());
