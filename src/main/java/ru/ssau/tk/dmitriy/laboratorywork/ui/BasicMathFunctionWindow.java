@@ -6,16 +6,14 @@ import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.TabulatedFunctionFact
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class BasicMathFunctionWindow extends JDialog {
     private final TabulatedFunctionFactory factory;
-    //как-то передавать функцию в главное окно
+
     private final JComboBox<String> functionsComboBox = new JComboBox<>();
-    private HashMap<String, MathFunction> functionsMap = new HashMap<>();
+    private final HashMap<String, MathFunction> functionsMap = new HashMap<>();
 
     private final JTextField fromField = new JTextField();
     private final JTextField toField = new JTextField();
@@ -93,8 +91,8 @@ public class BasicMathFunctionWindow extends JDialog {
         functionsMap.put("Тождественная функция", new IdentityFunction());
         functionsMap.put("Экспоненциальная функция", new ExponentFunction());
         functionsMap.put("Кубическая функция", new CubeFunction());
-        functionsMap.put("Константная функция", new ConstantFunction(2));//TODO:написать метод для получения числа от пользователя
-        String[] strings = new String[functionsMap.size()];//TODO:замахнемся еще на сложную функцию
+        functionsMap.put("Константная функция", new ConstantFunction(2));
+        String[] strings = new String[functionsMap.size()];
         int i = 0;
         for (String string : functionsMap.keySet()) {
             strings[i++] = string;
@@ -105,30 +103,28 @@ public class BasicMathFunctionWindow extends JDialog {
         }
     }
 
+    private double getUserConstant() {
+        JLabel screen = new JLabel("Введите константу");
+        String constant = JOptionPane.showInputDialog(screen);
+        return Double.parseDouble(constant);
+    }
+
     private void addButtonListener() {
         createButton.addActionListener(event -> {
-            try {//TODO: сделать более узкие варианты исключений
-                createCompositeFunction();
+            try {
+                if ("Тождественная функция" == functionsComboBox.getSelectedItem()) {
+                    functionsMap.put("Тождественная функция", new ConstantFunction(getUserConstant()));
+                }
                 MathFunction mathFunction = functionsMap.get(functionsComboBox.getSelectedItem());
                 double xFrom = Double.parseDouble(fromField.getText());
                 double xTo = Double.parseDouble(toField.getText());
                 int count = Integer.parseInt(countOfPointsField.getText());
-                System.out.println(factory.create(mathFunction, xFrom, xTo, count));//TODO: должно как-то передаваться в вызывающее окно
+                //TODO: должно как-то передаваться в вызывающее окно
+                System.out.println(factory.create(mathFunction, xFrom, xTo, count));
             } catch (Exception exception) {
-                exception.printStackTrace();//TODO:сообщения об ошибках в модальном режиме
+                new ExceptionWindow(this, exception);
             }
         });
-    }
-
-    private boolean isCreateCompositeFunction() {
-        return "Создать сложную функцию" == functionsComboBox.getSelectedItem();
-    }
-
-    private CompositeFunction createCompositeFunction() {
-        if (!isCreateCompositeFunction()) {
-            return null;
-        }
-        return null;//TODO:Создавать функцию в режиме модального окна
     }
 
     public static void main(String[] args) {
