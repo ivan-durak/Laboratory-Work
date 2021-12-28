@@ -36,6 +36,7 @@ public class BasicMathFunctionWindow extends JDialog {
         fillComboBox();
         addButtonListener(callback);
         compose();
+        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }

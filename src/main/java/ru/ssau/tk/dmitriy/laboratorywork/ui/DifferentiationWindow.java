@@ -8,11 +8,12 @@ import ru.ssau.tk.dmitriy.laboratorywork.operations.TabulatedDifferentialOperato
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DifferentiationWindow extends JFrame {
     private final TabulatedFunctionFactory factory;
-    private TabulatedFunction sourceTableFunction;
-    private TabulatedFunction deriveTableFunction;
+    private TabulatedFunction sourceFunction;
 
     private final JLabel originalFunction = new JLabel("<html>Исходная<br>функция:");
     private final JLabel titleOverDerive = new JLabel("Вычислить");
@@ -22,17 +23,19 @@ public class DifferentiationWindow extends JFrame {
     private final JButton saveOriginalButton = new JButton("Сохранить");
     private final JButton uploadOriginalButton = new JButton("Загрузить");
     private final BasicArrowButton deriveButton = new BasicArrowButton(BasicArrowButton.EAST);
-    private final JButton returnInMainWindowButton = new JButton("Вернуть в главное окно");
+    private final JButton transitToOperationsButton = new JButton("<html>Перейти к<br>операциям");
     private final JButton saveDeriveButton = new JButton("Сохранить");
 
+    private final PartEditable sourceTableFunction = new PartEditable();
+    private final NotMutable deriveTableFunction = new NotMutable();
 
-    private final PartEditable sourceFunction = new PartEditable();
-    private final NotMutable deriveFunction = new NotMutable();
+    private final JTable sourceFunctionTable = new JTable(sourceTableFunction);
+    private final JTable deriveFunctionTable = new JTable(deriveTableFunction);
 
-    private final JTable sourceFunctionTable = new JTable(sourceFunction);
-    private final JTable deriveFunctionTable = new JTable(deriveFunction);
+    private final JScrollPane sourceFunctionScroll = new JScrollPane(sourceFunctionTable);
+    private final JScrollPane deriveFunctionScroll = new JScrollPane(deriveFunctionTable);
 
-    public DifferentiationWindow(TabulatedFunctionFactory factory/*, Consumer<? super TabulatedFunction> callback*/) {
+    public DifferentiationWindow(TabulatedFunctionFactory factory) {
         super();
         setTitle("Окно дифференцирования");
         this.factory = factory;
@@ -50,11 +53,14 @@ public class DifferentiationWindow extends JFrame {
         setSize(700, 500);
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
+        sourceFunctionTable.setSize(180, 350);
+        deriveFunctionTable.setSize(180, 350);
+        deriveButton.setSize(50,150);
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(originalFunction)
-                                .addComponent(sourceFunctionTable)
+                                .addComponent(sourceFunctionScroll)
                                 .addComponent(createOriginalButton)
                                 .addComponent(saveOriginalButton)
                                 .addComponent(uploadOriginalButton))
@@ -63,14 +69,14 @@ public class DifferentiationWindow extends JFrame {
                                 .addComponent(deriveButton))
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(differentiationResult)
-                                .addComponent(deriveFunctionTable)
+                                .addComponent(deriveFunctionScroll)
                                 .addComponent(saveDeriveButton)
-                                .addComponent(returnInMainWindowButton)));
+                                .addComponent(transitToOperationsButton)));
         groupLayout.setVerticalGroup(
                 groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addGroup(groupLayout.createSequentialGroup()
                                 .addComponent(originalFunction)
-                                .addComponent(sourceFunctionTable)
+                                .addComponent(sourceFunctionScroll)
                                 .addComponent(createOriginalButton)
                                 .addComponent(saveOriginalButton)
                                 .addComponent(uploadOriginalButton))
@@ -79,50 +85,60 @@ public class DifferentiationWindow extends JFrame {
                                 .addComponent(deriveButton))
                         .addGroup(groupLayout.createSequentialGroup()
                                 .addComponent(differentiationResult)
-                                .addComponent(deriveFunctionTable)
+                                .addComponent(deriveFunctionScroll)
                                 .addComponent(saveDeriveButton)
-                                .addComponent(returnInMainWindowButton)));
+                                .addComponent(transitToOperationsButton)));
     }
 
     private void addButtonsListeners() {
+
         createOriginalButton.addActionListener(event -> {
             JLabel message = new JLabel("<html>Выберете реализацию<br>(Введите \"массив\" или \"список\")");
             String realization = JOptionPane.showInputDialog(this, message);
             switch (realization) {
                 case ("массив"): {
-
+                    new TabulatedTableWindow(factory, function -> {
+                        sourceFunction = function;
+                        sourceTableFunction.setFunction(sourceFunction);
+                    });
+                    break;
                 }
                 case ("список"): {
-                    new BasicMathFunctionWindow(factory, this::setSourceTableFunction);
+                    new BasicMathFunctionWindow(factory, function -> {
+                        sourceFunction = function;
+                        sourceTableFunction.setFunction(sourceFunction);
+                    });
+                    break;
                 }
             }
+            sourceTableFunction.fireTableDataChanged();
         });
+
         saveOriginalButton.addActionListener(event -> {
-            new WritingToFile(sourceTableFunction);
+            new WritingToFile(sourceFunction);
         });
+
         uploadOriginalButton.addActionListener(event -> {
-            new ReadingFromFile(factory, this::setSourceTableFunction);
+            new ReadingFromFile(factory, function -> {
+                sourceFunction = function;
+                sourceTableFunction.setFunction(sourceFunction);
+            });
+            sourceTableFunction.fireTableDataChanged();
         });
+
         deriveButton.addActionListener(event -> {
-            deriveTableFunction = new TabulatedDifferentialOperator().derive(sourceTableFunction);
+            deriveTableFunction.setFunction(new TabulatedDifferentialOperator().derive(sourceFunction));
+            deriveTableFunction.fireTableDataChanged();
         });
-        returnInMainWindowButton.addActionListener(event -> {
 
-        });
-        saveDeriveButton.addActionListener(event -> {
-            new WritingToFile(deriveTableFunction);
-        });
+        /*transitToOperationsButton.addActionListener(event -> {
+
+        });*/
+
+        saveDeriveButton.addActionListener(event -> new WritingToFile(deriveTableFunction.getFunction()));
     }
 
-    public TabulatedFunction getSourceTableFunction() {
-        return sourceTableFunction;
-    }
-
-    public void setSourceTableFunction(TabulatedFunction sourceTableFunction) {
-        this.sourceTableFunction = sourceTableFunction;
-    }
-
-    public static void main() {
+    public static void main(String[] args) {
         DifferentiationWindow differentiationWindow = new DifferentiationWindow(new ArrayTabulatedFunctionFactory());
     }
 }

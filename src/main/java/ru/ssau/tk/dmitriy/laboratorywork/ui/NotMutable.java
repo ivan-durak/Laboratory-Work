@@ -9,7 +9,7 @@ public class NotMutable extends AbstractTableModel {
     private static final int INDEX_COLUMN_NUMBER = 0;
     private static final int X_COLUMN_NUMBER = 1;
     private static final int Y_COLUMN_NUMBER = 2;
-    private static final long serialVersionUID = 2127375647346167102L;
+    private static final long serialVersionUID = -5424269263005186314L;
     private TabulatedFunction function;
 
     public NotMutable () {

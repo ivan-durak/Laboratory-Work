@@ -12,8 +12,6 @@ import java.io.FileInputStream;
 import java.util.function.Consumer;
 
 public class ReadingFromFile extends JDialog {
-    private TabulatedFunctionFactory factory;
-
 
     public ReadingFromFile(TabulatedFunctionFactory factory, Consumer<? super TabulatedFunction> callback) {
         setModal(true);
@@ -34,12 +32,5 @@ public class ReadingFromFile extends JDialog {
                 }
             }
         }
-    }
-
-    public ReadingFromFile(Consumer<? super TabulatedFunction> callback) {
-    }
-
-    public static void main(Consumer<? super TabulatedFunction> callback) {
-        new ReadingFromFile(callback);
     }
 }

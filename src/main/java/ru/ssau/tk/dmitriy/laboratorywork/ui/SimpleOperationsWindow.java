@@ -84,6 +84,8 @@ public class SimpleOperationsWindow extends JFrame {
         addButtonListeners();
 
         setLocationRelativeTo(null);
+        setResizable(false);
+        setVisible(true);
     }
 
     public Component designButton(JButton button) {
@@ -132,7 +134,7 @@ public class SimpleOperationsWindow extends JFrame {
         createTubFirst.addActionListener(event -> {
                     try {
                         int countOld = xValues.size();
-                        TabulatedTableWindow.main(factory, tableForFirstFunction::setFunction);
+                        new TabulatedTableWindow(factory, tableForFirstFunction::setFunction);
                         int countNew = tableForFirstFunction.getFunction().getCount();
                         wrapTable(tableForFirstFunction, countOld, countNew);
                     } catch (Exception e) {
@@ -147,7 +149,7 @@ public class SimpleOperationsWindow extends JFrame {
         createMathFirst.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-                BasicMathFunctionWindow.main(factory, tableForFirstFunction::setFunction);
+                new BasicMathFunctionWindow(factory, tableForFirstFunction::setFunction);
                 int countNew = tableForFirstFunction.getFunction().getCount();
                 wrapTable(tableForFirstFunction, countOld, countNew);
             } catch (Exception e) {
@@ -160,7 +162,7 @@ public class SimpleOperationsWindow extends JFrame {
 
         saveFirst.addActionListener(event -> {
             try {
-               WritingToFile.main(tableForFirstFunction.getFunction());
+                new WritingToFile(tableForFirstFunction.getFunction());
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -172,7 +174,7 @@ public class SimpleOperationsWindow extends JFrame {
         openFirst.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-                ReadingFromFile.main(tableForFirstFunction::setFunction);
+                new ReadingFromFile(factory, tableForFirstFunction::setFunction);
                 int countNew = tableForFirstFunction.getFunction().getCount();
                 wrapTable(tableForFirstFunction, countOld, countNew);
             } catch (Exception e) {
@@ -186,7 +188,7 @@ public class SimpleOperationsWindow extends JFrame {
         createTubSecond.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-                TabulatedTableWindow.main(factory, tableForSecondFunction::setFunction);
+                new TabulatedTableWindow(factory, tableForSecondFunction::setFunction);
                 int countNew = tableForSecondFunction.getFunction().getCount();
                 wrapTable(tableForSecondFunction, countOld, countNew);
             } catch (Exception e) {
@@ -200,7 +202,7 @@ public class SimpleOperationsWindow extends JFrame {
         createMathSecond.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-               BasicMathFunctionWindow.main(factory, tableForSecondFunction::setFunction);
+                new BasicMathFunctionWindow(factory, tableForSecondFunction::setFunction);
                 int countNew = tableForSecondFunction.getFunction().getCount();
                 wrapTable(tableForSecondFunction, countOld, countNew);
             } catch (Exception e) {
@@ -213,7 +215,7 @@ public class SimpleOperationsWindow extends JFrame {
 
         saveSecond.addActionListener(event -> {
             try {
-                WritingToFile.main(tableForSecondFunction.getFunction());
+                new WritingToFile(tableForSecondFunction.getFunction());
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -225,7 +227,7 @@ public class SimpleOperationsWindow extends JFrame {
         openSecond.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-                ReadingFromFile.main(tableForSecondFunction::setFunction);
+                new ReadingFromFile(factory, tableForSecondFunction::setFunction);
                 int countNew = tableForSecondFunction.getFunction().getCount();
                 wrapTable(tableForSecondFunction, countOld, countNew);
             } catch (Exception e) {
@@ -236,9 +238,9 @@ public class SimpleOperationsWindow extends JFrame {
             }
         });
 
-        saveResult.addActionListener(event ->{
+        saveResult.addActionListener(event -> {
             try {
-                WritingToFile.main(tableForResult.getFunction());
+                new WritingToFile(tableForResult.getFunction());
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -250,7 +252,8 @@ public class SimpleOperationsWindow extends JFrame {
         plus.addActionListener(event -> {
             try {
                 int countOld = tableForFirstFunction.getFunction().getCount();
-                tableForResult.setFunction(tabulatedFunctionOperationService.sum(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
+                tableForResult.setFunction(tabulatedFunctionOperationService
+                        .sum(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
                 int countNew = tableForResult.getFunction().getCount();
                 wrapTableForResult(tableForResult, countOld, countNew);
             } catch (Exception e) {
@@ -264,7 +267,8 @@ public class SimpleOperationsWindow extends JFrame {
         subtraction.addActionListener(event -> {
             try {
                 int countOld = tableForResult.getFunction().getCount();
-                tableForResult.setFunction(tabulatedFunctionOperationService.subtraction(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
+                tableForResult.setFunction(tabulatedFunctionOperationService
+                        .subtraction(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
                 int countNew = tableForResult.getFunction().getCount();
                 wrapTableForResult(tableForResult, countOld, countNew);
             } catch (Exception e) {
@@ -278,7 +282,8 @@ public class SimpleOperationsWindow extends JFrame {
         multiplication.addActionListener(event -> {
             try {
                 int countOld = tableForFirstFunction.getFunction().getCount();
-                tableForResult.setFunction(tabulatedFunctionOperationService.multiplication(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
+                tableForResult.setFunction(tabulatedFunctionOperationService
+                        .multiplication(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
                 int countNew = tableForResult.getFunction().getCount();
                 wrapTableForResult(tableForResult, countOld, countNew);
             } catch (Exception e) {
@@ -292,7 +297,8 @@ public class SimpleOperationsWindow extends JFrame {
         division.addActionListener(event -> {
             try {
                 int countOld = tableForFirstFunction.getFunction().getCount();
-                tableForResult.setFunction(tabulatedFunctionOperationService.divide(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
+                tableForResult.setFunction(tabulatedFunctionOperationService
+                        .divide(tableForFirstFunction.getFunction(), tableForSecondFunction.getFunction()));
                 int countNew = tableForResult.getFunction().getCount();
                 wrapTableForResult(tableForResult, countOld, countNew);
             } catch (Exception e) {
@@ -374,11 +380,5 @@ public class SimpleOperationsWindow extends JFrame {
                         .addComponent(openSecond)
                         .addComponent(saveResult)));
         setLocationByPlatform(true);
-    }
-
-    public static void main() throws IOException {
-        SimpleOperationsWindow window = new SimpleOperationsWindow();
-        window.setResizable(false);
-        window.setVisible(true);
     }
 }

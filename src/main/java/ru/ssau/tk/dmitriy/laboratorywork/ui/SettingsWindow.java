@@ -7,6 +7,8 @@ import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.TabulatedFunctionFact
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.io.IOException;
@@ -21,6 +23,7 @@ public class SettingsWindow extends JDialog {
     private final JButton confirmationButton = new JButton("Сохранить");
 
     private final HashMap<JRadioButton, TabulatedFunctionFactory> chooseFactory = new HashMap<>();
+    private TabulatedFunctionFactory factory;
 
     public SettingsWindow(Consumer<? super TabulatedFunctionFactory> callback) {
         super();
@@ -60,8 +63,14 @@ public class SettingsWindow extends JDialog {
 
     private void addButtonListener(Consumer<? super TabulatedFunctionFactory> callback) {
         confirmationButton.addActionListener(event -> {
-            callback.accept(chooseFactory.get(buttonGroup.getSelection()));
+            callback.accept(factory);
             this.dispose();
+        });
+        arrayButton.addActionListener(event -> {
+            factory = chooseFactory.get(arrayButton);
+        });
+        listButton.addActionListener(event -> {
+            factory = chooseFactory.get(listButton);
         });
     }
 
@@ -74,9 +83,5 @@ public class SettingsWindow extends JDialog {
         buttonGroup.add(arrayButton);
         arrayButton.setSelected(true);
         buttonGroup.add(listButton);
-    }
-    public static void main(TabulatedFunctionFactory factory) throws IOException {
-        SettingsWindow frame = new SettingsWindow((Consumer<? super TabulatedFunctionFactory>) factory);
-        frame.setVisible(true);
     }
 }

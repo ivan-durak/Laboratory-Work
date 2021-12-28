@@ -9,7 +9,7 @@ public class PartEditable extends AbstractTableModel {
     private static final int INDEX_COLUMN_NUMBER = 0;
     private static final int X_COLUMN_NUMBER = 1;
     private static final int Y_COLUMN_NUMBER = 2;
-    private static final long serialVersionUID = 5627188898700040102L;
+    private static final long serialVersionUID = -2462216539692911771L;
     private TabulatedFunction function;
 
     public PartEditable() {

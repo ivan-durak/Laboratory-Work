@@ -1,5 +1,7 @@
 package ru.ssau.tk.dmitriy.laboratorywork.ui;
 
+import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.TabulatedFunctionFactory;
 
 import javax.swing.*;
@@ -15,7 +17,6 @@ public class Window extends JFrame {
     private final List<Double> yValues = new ArrayList<>();
     private final PartEditable tableModel = new PartEditable();
     private final JTable table = new JTable(tableModel);
-    private final JLabel topLabel = new JLabel("HelloKitty");
     private final JLabel label = new JLabel();
 
     private final JButton createFunctionButton = new JButton("Создать табулированную функцию из массивов");
@@ -27,55 +28,31 @@ public class Window extends JFrame {
     private final JButton operationButton = new JButton("Операции");
     private final JButton differential = new JButton("Производная");
 
-    private TabulatedFunctionFactory factory;
+    private TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
 
-    public Window() throws IOException {
+    public Window() {
         super("Основное окно");
 
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(800, 580);
-        container.add(topLabel);
         container.setBackground(Color.WHITE);
-        container.add(designButton(createFunctionButton));
-        container.add(designButton(settingsButton));
-        container.add(designButton(createMathFunctionButton));
-        container.add(designButton(openButton));
-        container.add(designButton(saveButton));
-        container.add(designButton(operationButton));
-        container.add(designButton(differential));
+        container.add(createFunctionButton);
+        container.add(settingsButton);
+        container.add(createMathFunctionButton);
+        container.add(openButton);
+        container.add(saveButton);
+        container.add(operationButton);
+        container.add(differential);
 
-        ImageIcon icon = new ImageIcon(javax.imageio.ImageIO.read((new File("1.jpg"))));
-        label.setIcon(icon);
         label.setPreferredSize(new Dimension(10, 10));
-
-        designTable(table);
-        designLabel(topLabel);
 
         compose();
         addButtonListeners();
 
         setLocationRelativeTo(null);
-    }
-
-
-    public Component designButton(JButton button) {
-        button.setBackground(Color.PINK);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        return button;
-    }
-
-    public void designLabel(JLabel label) {
-        label.setFont(new Font("Consolas", Font.ITALIC + Font.BOLD, 28));
-        label.setForeground(Color.PINK);
-        label.setVerticalAlignment(JLabel.TOP);
-    }
-
-    public void designTable(JTable table) {
-        table.setBackground(Color.WHITE);
-        table.setGridColor(Color.PINK);
+        setVisible(true);
     }
 
     private void wrapTable(int countOld, int countNew) {
@@ -88,13 +65,28 @@ public class Window extends JFrame {
             xValues.add(tableModel.getFunction().getX(i));
             yValues.add(tableModel.getFunction().getY(i));
         }
+        tableModel.fireTableDataChanged();
     }
 
     private void addButtonListeners() {
         createFunctionButton.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-                TabulatedTableWindow.main(factory, tableModel::setFunction);
+                new TabulatedTableWindow(factory, tableModel::setFunction);
+                int countNew = tableModel.getFunction().getCount();
+                wrapTable(countOld, countNew);
+            } catch (Exception e) {
+                if (e instanceof NullPointerException) {
+                    e.printStackTrace();
+                } else
+                    new ExceptionWindow(this, e);
+            }
+        });
+
+        createMathFunctionButton.addActionListener(event -> {
+            try {
+                int countOld = xValues.size();
+                new BasicMathFunctionWindow(factory, tableModel::setFunction);
                 int countNew = tableModel.getFunction().getCount();
                 wrapTable(countOld, countNew);
             } catch (Exception e) {
@@ -107,21 +99,7 @@ public class Window extends JFrame {
 
         settingsButton.addActionListener(event -> {
             try {
-                SettingsWindow.main(factory);
-            } catch (Exception e) {
-                if (e instanceof NullPointerException) {
-                    e.printStackTrace();
-                } else
-                    new ExceptionWindow(this, e);
-            }
-        });
-
-        createMathFunctionButton.addActionListener(event -> {
-            try {
-                int countOld = xValues.size();
-                BasicMathFunctionWindow.main(factory, tableModel::setFunction);
-                int countNew = tableModel.getFunction().getCount();
-                wrapTable(countOld, countNew);
+                new SettingsWindow(selectedFactory -> factory = selectedFactory);
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -133,7 +111,7 @@ public class Window extends JFrame {
         openButton.addActionListener(event -> {
             try {
                 int countOld = xValues.size();
-                ReadingFromFile.main(tableModel::setFunction);
+                new ReadingFromFile(factory, tableModel::setFunction);
                 int countNew = tableModel.getFunction().getCount();
                 wrapTable(countOld, countNew);
             } catch (Exception e) {
@@ -146,7 +124,7 @@ public class Window extends JFrame {
 
         saveButton.addActionListener(event -> {
             try {
-                WritingToFile.main(tableModel.getFunction());
+                new WritingToFile(tableModel.getFunction());
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -157,7 +135,7 @@ public class Window extends JFrame {
 
         operationButton.addActionListener(event -> {
             try {
-                SimpleOperationsWindow.main();
+                new SimpleOperationsWindow();
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -168,7 +146,7 @@ public class Window extends JFrame {
 
         differential.addActionListener(event -> {
             try {
-                DifferentiationWindow.main();
+                new DifferentiationWindow(factory);
             } catch (Exception e) {
                 if (e instanceof NullPointerException) {
                     e.printStackTrace();
@@ -186,8 +164,7 @@ public class Window extends JFrame {
         JScrollPane tableScrollPane = new JScrollPane(table);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(label)
-                        .addComponent(topLabel))
+                        .addComponent(label))
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(createFunctionButton)
                         .addComponent(createMathFunctionButton))
@@ -200,11 +177,9 @@ public class Window extends JFrame {
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(tableScrollPane))
         );
-
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(label)
-                        .addComponent(topLabel))
+                        .addComponent(label))
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(createFunctionButton)
                         .addComponent(createMathFunctionButton))
@@ -220,7 +195,6 @@ public class Window extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-       Window window = new Window();
-        window.setVisible(true);
+        Window window = new Window();
     }
 }

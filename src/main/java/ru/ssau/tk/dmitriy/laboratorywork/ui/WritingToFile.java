@@ -30,7 +30,4 @@ public class WritingToFile extends JDialog {
             }
         }
     }
-    public static void main(TabulatedFunction func) {
-        new WritingToFile(func);
-    }
 }
