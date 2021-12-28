@@ -36,22 +36,11 @@ public class TabulatedTableWindow extends JDialog {
         container.setLayout(new FlowLayout());
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setSize(600, 400);
-        container.setBackground(Color.PINK);
         container.add(label);
         container.add(inputButton);
         container.add(createFunctionButton);
 
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setBackground(Color.WHITE);
-        table.setGridColor(Color.PINK);
-
-        label.setForeground(Color.WHITE);
-
-        inputButton.setBackground(Color.WHITE);
-        inputButton.setForeground(Color.PINK);
-
-        createFunctionButton.setBackground(Color.WHITE);
-        createFunctionButton.setForeground(Color.PINK);
 
         compose();
         addButtonListeners(factory, callback);

@@ -15,8 +15,8 @@ public class WritingToFile extends JDialog {
         setModal(true);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.addChoosableFileFilter(
-                new FileNameExtensionFilter("Bin files", "bin"));
+        //fileChooser.addChoosableFileFilter(
+        //        new FileNameExtensionFilter("Bin files", "bin"));
         fileChooser.setAcceptAllFileFilterUsed(false);
         int condition = fileChooser.showSaveDialog(this);
         if (condition == JFileChooser.APPROVE_OPTION) {

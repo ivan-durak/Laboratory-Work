@@ -55,30 +55,26 @@ public class SimpleOperationsWindow extends JFrame {
         container.setBackground(Color.WHITE);
         setSize(1000, 580);
 
-        container.add(designButton(plus));
-        container.add(designButton(division));
-        container.add(designButton(multiplication));
-        container.add(designButton(subtraction));
+        container.add(plus);
+        container.add(division);
+        container.add(multiplication);
+        container.add(subtraction);
 
-        container.add(designButton(createTubFirst));
-        container.add(designButton(createMathFirst));
-        container.add(designButton(saveFirst));
-        container.add(designButton(openFirst));
+        container.add(createTubFirst);
+        container.add(createMathFirst);
+        container.add(saveFirst);
+        container.add(openFirst);
 
-        container.add(designButton(createTubSecond));
-        container.add(designButton(createMathSecond));
-        container.add(designButton(saveSecond));
-        container.add(designButton(openSecond));
+        container.add(createTubSecond);
+        container.add(createMathSecond);
+        container.add(saveSecond);
+        container.add(openSecond);
 
-        container.add(designButton(saveResult));
+        container.add(saveResult);
 
-        designTable(tableFirst);
-        designTable(tableSecond);
-        designTable(tableResult);
-
-        designLabel(createFirst);
-        designLabel(createSecond);
-        designLabel(createResult);
+        createFirst.setVerticalAlignment(JLabel.TOP);
+        createSecond.setVerticalAlignment(JLabel.TOP);
+        createResult.setVerticalAlignment(JLabel.TOP);
 
         compose();
         addButtonListeners();
@@ -86,24 +82,6 @@ public class SimpleOperationsWindow extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
-    }
-
-    public Component designButton(JButton button) {
-        button.setBackground(Color.PINK);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        return button;
-    }
-
-    public void designLabel(JLabel label) {
-        label.setFont(new Font("Consolas", Font.ITALIC + Font.BOLD, 15));
-        label.setForeground(Color.PINK);
-        label.setVerticalAlignment(JLabel.TOP);
-    }
-
-    public void designTable(JTable table) {
-        table.setBackground(Color.WHITE);
-        table.setGridColor(Color.PINK);
     }
 
     public void wrapTable(PartEditable tableModel, int countOld, int countNew) {
@@ -321,9 +299,9 @@ public class SimpleOperationsWindow extends JFrame {
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(createFirst)
-                        .addGap(76)
+                        .addGap(120)
                         .addComponent(createSecond)
-                        .addGap(75)
+                        .addGap(115)
                         .addComponent(createResult))
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(createTubFirst)
