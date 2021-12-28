@@ -4,10 +4,12 @@ import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.ArrayTabulatedFunctio
 import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.tk.dmitriy.laboratorywork.functions.factory.TabulatedFunctionFactory;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.function.Consumer;
+import java.io.IOException;
 
 public class SettingsWindow extends JDialog {
     private final JLabel title = new JLabel("<html>Хранение функции<br> на основе: ");
@@ -72,5 +74,9 @@ public class SettingsWindow extends JDialog {
         buttonGroup.add(arrayButton);
         arrayButton.setSelected(true);
         buttonGroup.add(listButton);
+    }
+    public static void main(TabulatedFunctionFactory factory) throws IOException {
+        SettingsWindow frame = new SettingsWindow((Consumer<? super TabulatedFunctionFactory>) factory);
+        frame.setVisible(true);
     }
 }

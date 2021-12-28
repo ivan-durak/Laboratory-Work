@@ -8,7 +8,6 @@ import ru.ssau.tk.dmitriy.laboratorywork.operations.TabulatedDifferentialOperato
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class DifferentiationWindow extends JFrame {
     private final TabulatedFunctionFactory factory;
@@ -26,12 +25,9 @@ public class DifferentiationWindow extends JFrame {
     private final JButton returnInMainWindowButton = new JButton("Вернуть в главное окно");
     private final JButton saveDeriveButton = new JButton("Сохранить");
 
-    private final ArrayList<String> sourceXValues = new ArrayList<>();
-    private final ArrayList<String> sourceYValues = new ArrayList<>();
-    private final PartEditable sourceFunction = new PartEditable(sourceXValues, sourceYValues);
-    private final ArrayList<String> deriveXValues = new ArrayList<>();
-    private final ArrayList<String> deriveYValues = new ArrayList<>();
-    private final NotMutable deriveFunction = new NotMutable(deriveXValues, deriveYValues);
+
+    private final PartEditable sourceFunction = new PartEditable();
+    private final NotMutable deriveFunction = new NotMutable();
 
     private final JTable sourceFunctionTable = new JTable(sourceFunction);
     private final JTable deriveFunctionTable = new JTable(deriveFunction);
@@ -126,7 +122,7 @@ public class DifferentiationWindow extends JFrame {
         this.sourceTableFunction = sourceTableFunction;
     }
 
-    public static void main(String[] args) {
+    public static void main() {
         DifferentiationWindow differentiationWindow = new DifferentiationWindow(new ArrayTabulatedFunctionFactory());
     }
 }
