@@ -23,7 +23,6 @@ public class DifferentiationWindow extends JFrame {
     private final JButton saveOriginalButton = new JButton("Сохранить");
     private final JButton uploadOriginalButton = new JButton("Загрузить");
     private final BasicArrowButton deriveButton = new BasicArrowButton(BasicArrowButton.EAST);
-    private final JButton transitToOperationsButton = new JButton("<html>Перейти к<br>операциям");
     private final JButton saveDeriveButton = new JButton("Сохранить");
 
     private final PartEditable sourceTableFunction = new PartEditable();
@@ -40,8 +39,20 @@ public class DifferentiationWindow extends JFrame {
         setTitle("Окно дифференцирования");
         this.factory = factory;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        Container container = getContentPane();
+        container.add(originalFunction);
+        container.add(titleOverDerive);
+        container.add(differentiationResult);
+        container.add(createOriginalButton);
+        container.add(saveOriginalButton);
+        container.add(uploadOriginalButton);
+        container.add(deriveButton);
+        container.add(saveDeriveButton);
+        container.add(sourceFunctionScroll);
+        container.add(deriveFunctionScroll);
         compose();
         addButtonsListeners();
+        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -51,11 +62,11 @@ public class DifferentiationWindow extends JFrame {
         GroupLayout groupLayout = new GroupLayout(container);
         container.setLayout(groupLayout);
         setSize(700, 500);
-        groupLayout.setAutoCreateGaps(true);
-        groupLayout.setAutoCreateContainerGaps(true);
         sourceFunctionTable.setSize(180, 350);
         deriveFunctionTable.setSize(180, 350);
-        deriveButton.setSize(50,150);
+        deriveButton.setSize(50, 150);
+        groupLayout.setAutoCreateGaps(true);
+        groupLayout.setAutoCreateContainerGaps(true);
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -64,14 +75,15 @@ public class DifferentiationWindow extends JFrame {
                                 .addComponent(createOriginalButton)
                                 .addComponent(saveOriginalButton)
                                 .addComponent(uploadOriginalButton))
+                        .addGap(25)
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                 .addComponent(titleOverDerive)
                                 .addComponent(deriveButton))
+                        .addGap(25)
                         .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(differentiationResult)
                                 .addComponent(deriveFunctionScroll)
-                                .addComponent(saveDeriveButton)
-                                .addComponent(transitToOperationsButton)));
+                                .addComponent(saveDeriveButton)));
         groupLayout.setVerticalGroup(
                 groupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addGroup(groupLayout.createSequentialGroup()
@@ -81,19 +93,22 @@ public class DifferentiationWindow extends JFrame {
                                 .addComponent(saveOriginalButton)
                                 .addComponent(uploadOriginalButton))
                         .addGroup(groupLayout.createSequentialGroup()
+                                .addGap(16)
                                 .addComponent(titleOverDerive)
-                                .addComponent(deriveButton))
+                                .addGap(140)
+                                .addComponent(deriveButton)
+                                .addGap(190))
                         .addGroup(groupLayout.createSequentialGroup()
                                 .addComponent(differentiationResult)
                                 .addComponent(deriveFunctionScroll)
                                 .addComponent(saveDeriveButton)
-                                .addComponent(transitToOperationsButton)));
+                                .addGap(64)));
     }
 
     private void addButtonsListeners() {
 
         createOriginalButton.addActionListener(event -> {
-            JLabel message = new JLabel("<html>Выберете реализацию<br>(Введите \"массив\" или \"список\")");
+            JLabel message = new JLabel("<html>Выберете способ создания<br>(Введите \"массив\" или \"функция\")");
             String realization = JOptionPane.showInputDialog(this, message);
             switch (realization) {
                 case ("массив"): {
@@ -103,7 +118,7 @@ public class DifferentiationWindow extends JFrame {
                     });
                     break;
                 }
-                case ("список"): {
+                case ("функция"): {
                     new BasicMathFunctionWindow(factory, function -> {
                         sourceFunction = function;
                         sourceTableFunction.setFunction(sourceFunction);
@@ -131,14 +146,6 @@ public class DifferentiationWindow extends JFrame {
             deriveTableFunction.fireTableDataChanged();
         });
 
-        /*transitToOperationsButton.addActionListener(event -> {
-
-        });*/
-
         saveDeriveButton.addActionListener(event -> new WritingToFile(deriveTableFunction.getFunction()));
-    }
-
-    public static void main(String[] args) {
-        DifferentiationWindow differentiationWindow = new DifferentiationWindow(new ArrayTabulatedFunctionFactory());
     }
 }

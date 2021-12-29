@@ -20,7 +20,7 @@ public class BasicMathFunctionWindow extends JDialog {
     private final JTextField toField = new JTextField();
     private final JTextField countOfPointsField = new JTextField();
 
-    private final JLabel chooseFunctionLabel = new JLabel("<html>Выберите <br>или создайте<br> функцию");
+    private final JLabel chooseFunctionLabel = new JLabel("<html>Выберите <br> функцию");
     private final JLabel fromLabel = new JLabel("От:");
     private final JLabel toLabel = new JLabel("До:");
     private final JLabel countOfPointsLabel = new JLabel("<html>Количество<br>точек:");
@@ -34,6 +34,16 @@ public class BasicMathFunctionWindow extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
         fillComboBox();
+        Container container = getContentPane();
+        container.add(functionsComboBox);
+        container.add(fromField);
+        container.add(toField);
+        container.add(countOfPointsField);
+        container.add(chooseFunctionLabel);
+        container.add(fromLabel);
+        container.add(toLabel);
+        container.add(countOfPointsLabel);
+        container.add(createButton);
         addButtonListener(callback);
         compose();
         setResizable(false);
@@ -47,13 +57,13 @@ public class BasicMathFunctionWindow extends JDialog {
         container.setLayout(layoutManager);
         layoutManager.setAutoCreateGaps(true);
         layoutManager.setAutoCreateContainerGaps(true);
-        setSize(500, 150);
+        setSize(500, 130);
         layoutManager.setHorizontalGroup(
                 layoutManager.createSequentialGroup()
-                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(chooseFunctionLabel)
                                 .addComponent(functionsComboBox))
-                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(fromLabel)
                                 .addComponent(fromField))
                         .addGroup(layoutManager.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -66,15 +76,19 @@ public class BasicMathFunctionWindow extends JDialog {
         layoutManager.setVerticalGroup(
                 layoutManager.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(layoutManager.createSequentialGroup()
+                                .addGap(10)
                                 .addComponent(chooseFunctionLabel)
                                 .addComponent(functionsComboBox))
                         .addGroup(layoutManager.createSequentialGroup()
+                                .addGap(27)
                                 .addComponent(fromLabel)
                                 .addComponent(fromField))
                         .addGroup(layoutManager.createSequentialGroup()
+                                .addGap(27)
                                 .addComponent(toLabel)
                                 .addComponent(toField))
                         .addGroup(layoutManager.createSequentialGroup()
+                                .addGap(11)
                                 .addComponent(countOfPointsLabel)
                                 .addComponent(countOfPointsField))
                         .addComponent(createButton));
